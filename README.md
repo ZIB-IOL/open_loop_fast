@@ -1,7 +1,10 @@
 # Acceleration of Frank-Wolfe Algorithms with Open-Loop Step-Sizes
 
-Code for the paper:
-Wirth, E., Pokutta, S., and Kerdreux, T. (2023). Acceleration of Frank-Wolfe Algorithms with Open-Loop Step-Sizes. To Appear in Proceedings of AISTATS.
+## References
+This project is an extension of the previously published Git repository
+[open_loop_fw](https://github.com/ZIB-IOL/open_loop_fw), which contains the code to the following paper:
+Wirth, E., Pokutta, S., and Kerdreux, T. (2023). Acceleration of Frank-Wolfe Algorithms with Open-Loop Step-Sizes. 
+In Proceedings of AISTATS.
 
 
 ## Installation guide
@@ -15,11 +18,11 @@ Run the command:
 $ conda env create --file environment.yml
 ```
 
-This will create the conda environment open_loop_fw.
+This will create the conda environment affine_invariant_open_loop_fw.
 
 Activate the conda environment with:
 ```shell script
-$ conda activate open_loop_fw
+$ conda activate affine_invariant_open_loop_fw
 ```
 Navigate to ~/tmp
 
