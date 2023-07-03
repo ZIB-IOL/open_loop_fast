@@ -1,85 +1,8 @@
 import autograd.numpy as np
 from scipy.sparse.linalg import svds
 
-from all_functions.auxiliary_functions import fd, get_non_zero_indices
-from all_functions.hilbert_space_element import ElementMarginalPolytope
-from all_functions.objective_function import SquaredLoss
-
-
-class HilbertSpaceWhaba:
-    """A class used to represent the Hilbert space from [1, 2].
-
-    Let Y = [0, 1]. Define the RKHS
-    H = {x: Y -> R | x(y) = sqrt(2) sum_j^infty a_j cos(2pi j y) + b_j sin(2pi j y), f' in L^2(Y), a_j, b_j in R}.
-    The scalar product is <w, x> = integral_Y w'(y) x'(y) dx.
-    The associated kernel is k(y, z) = sum_j=1^infty 2 / (2pi j)^2 cos(2pi j (y - z)).
-    The associated feature map is Phi: Y -> H, Phi(y) = k(t, y) = sum_j=1^infty 2 / (2pi j)^2 cos(2pi j (t - y)).
-    Elements of the marginal polytope C are of the form x = sum_i^n w_i Phi(y_i).
-
-    Attributes:
-        iterations_lmo: integer
-                The number of exhaustive search steps we conduct to solve the linear minimization problem.
-
-    Methods:
-        linear_minimization_oracle(f: object, iterations)
-            Solves the linear minimization problem min_p in C <x, y>.
-        initial_point()
-            Returns the initial vertex.
-
-    References:
-        [1] Francis Bach, Simon Lacoste-Julien, and Guillaume Obozinski. On the equivalence between herding and
-            conditional gradient algorithms. arXiv preprint arXiv:1203.4523, 2012.
-        [2] Grace Wahba. Spline models for observational data. SIAM, 1990.
-    """
-
-    def __init__(self, iterations_lmo: int = 100):
-        self.iterations_lmo = iterations_lmo
-        assert self.iterations_lmo > 0, "Number of ITERATIONS needs to be greater than 0."
-
-    def linear_minimization_oracle(self,
-                                   objective_function: SquaredLoss,
-                                   x: ElementMarginalPolytope,
-                                   ):
-        """Solves the linear minimization problem min_p in C <x - mu, fw_vertex>.
-
-        Returns the element p_t in the Hilbert space H such that <x - mu, fw_vertex> is minimized.
-
-        Args:
-            objective_function: instance of an objective function class
-                An instance of an objective function class.
-            x: instance of ElementMarginalPolytope
-                An instance of ElementMarginalPolytope.
-
-        Returns:
-            fw_vertex: instance of ElementMarginalPolytope
-                An instance of ElementMarginalPolytope which is the approximate solution to the linear minimization
-                problem.
-            fw_gap: float
-                The FW gap.
-        """
-
-        optimal_value = 10e16
-        optimal_point = None
-        fw_vertex = None
-        for idx in range(0, self.iterations_lmo):
-            current_point = idx / self.iterations_lmo
-            current_p = ElementMarginalPolytope(np.array([1]), np.array([current_point]))
-            current_value = objective_function.evaluate_gradient(x, current_p)
-            if current_value < optimal_value:
-                optimal_value = current_value
-                optimal_point = current_point
-                fw_vertex = current_p
-
-        assert optimal_point is not None, "Linear minimization oracle did not find a correct point."
-        assert fw_vertex is not None, "Linear minimization oracle did not find a correct point."
-
-        fw_gap = objective_function.evaluate_gradient(x, x) - optimal_value
-        return fw_vertex, fw_gap
-
-    def initial_point(self):
-        """Returns the initial vertex."""
-        x = ElementMarginalPolytope()
-        return x
+from src.auxiliary_functions import fd
+from src.objective_function import SquaredLoss
 
 
 def lpnorm(vector, p):

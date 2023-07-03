@@ -1,4 +1,4 @@
-from all_functions.frank_wolfe import frank_wolfe, decomposition_invariant_frank_wolfe, away_step_frank_wolfe, \
+from src.frank_wolfe import frank_wolfe, decomposition_invariant_frank_wolfe, away_step_frank_wolfe, \
     momentum_guided_frank_wolfe, primal_averaging_frank_wolfe
 import autograd.numpy as np
 from scipy import stats
@@ -9,8 +9,7 @@ def compute_convergence_rates(data, n_iterates):
 
     Args:
         data
-        n_iterates:
-            The average over how many iterates we want to compute the converge rate
+        n_iterates
 
     References:
         [1] Senning, Jonathan R. "Computing and Estimating the Rate of Convergence" (PDF). gordon.edu.
@@ -44,7 +43,8 @@ def run_experiment(iterations,
                    difw_step_size_rules: list = [],
                    afw_step_size_rules: list = [],
                    mfw_step_size_rules: list = [],
-                   pafw_step_size_rules: list = []
+                   pafw_step_size_rules: list = [],
+                   optimality_measure: str = "primal"
                    ):
     """
     Minimizes objective_function over feasible_region.
@@ -66,9 +66,11 @@ def run_experiment(iterations,
             The types of MFW step-size rules we want to run. (Default is [].)
         pafw_step_size_rules: list
             The types of PAFW step-size rules we want to run. (Default is [].)
+        optimality_measure: str, Optional
+            Choose from ["primal", "dual", "bestgap"]. (Default is "primal".)
 
     Returns:
-        Returns a list of lists of primal gaps and a list of labels.
+        Returns a list of lists of the chosen optimality measure and a list of labels.
     """
     labels = []
     data = []
@@ -79,11 +81,11 @@ def run_experiment(iterations,
                                                                         objective_function=objective_function,
                                                                         n_iters=(int(iterations + run_more)),
                                                                         step=step)
-
-        if run_more == 0:
-            data_list = loss_list
-        else:
-            data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        if optimality_measure == "primal":
+            if run_more == 0:
+                data_list = loss_list
+            else:
+                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         data.append(data_list)
         labels.append(current_label)
     for step in afw_step_size_rules:
@@ -93,11 +95,11 @@ def run_experiment(iterations,
                                                                                   n_iters=(
                                                                                       int(iterations + run_more)),
                                                                                   step=step)
-
-        if run_more == 0:
-            data_list = loss_list
-        else:
-            data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        if optimality_measure == "primal":
+            if run_more == 0:
+                data_list = loss_list
+            else:
+                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         data.append(data_list)
         labels.append(current_label)
     for step in difw_step_size_rules:
@@ -107,11 +109,11 @@ def run_experiment(iterations,
             objective_function=objective_function,
             n_iters=(int(iterations + run_more)),
             step=step)
-
-        if run_more == 0:
-            data_list = loss_list
-        else:
-            data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        if optimality_measure == "primal":
+            if run_more == 0:
+                data_list = loss_list
+            else:
+                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         data.append(data_list)
         labels.append(current_label)
     for step in mfw_step_size_rules:
@@ -121,10 +123,11 @@ def run_experiment(iterations,
             feasible_region=feasible_region, objective_function=objective_function,
             n_iters=(int(iterations + run_more)), step=step)
 
-        if run_more == 0:
-            data_list = loss_list
-        else:
-            data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        if optimality_measure == "primal":
+            if run_more == 0:
+                data_list = loss_list
+            else:
+                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         data.append(data_list)
         labels.append(current_label)
     for step in pafw_step_size_rules:
@@ -134,10 +137,11 @@ def run_experiment(iterations,
             feasible_region=feasible_region, objective_function=objective_function,
             n_iters=(int(iterations + run_more)), step=step)
 
-        if run_more == 0:
-            data_list = loss_list
-        else:
-            data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        if optimality_measure == "primal":
+            if run_more == 0:
+                data_list = loss_list
+            else:
+                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         data.append(data_list)
         labels.append(current_label)
 

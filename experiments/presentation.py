@@ -5,12 +5,12 @@ import random
 import autograd.numpy as np
 from global_ import *
 import matplotlib as mpl
-from all_functions.problem_settings import polytope_experiment, gisette, uniformly_convex, movielens
-from all_functions.auxiliary_functions import distribution_to_string
-from all_functions.feasible_region import HilbertSpaceWhaba
-from all_functions.objective_function import confirm_rho_distribution, mu_from_rho, SquaredLoss
-from all_functions.plotting import primal_gap_plotter, determine_y_lims, only_min
-from all_functions.experiments_auxiliary_functions import run_experiment
+from src.problem_settings import polytope_experiment, gisette, uniformly_convex, movielens
+from src.auxiliary_functions import distribution_to_string
+from src.feasible_region import HilbertSpaceWhaba
+from src.objective_function import confirm_rho_distribution, mu_from_rho, SquaredLoss
+from src.plotting import primal_gap_plotter, determine_y_lims, only_min
+from src.experiments_auxiliary_functions import run_experiment
 
 
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE

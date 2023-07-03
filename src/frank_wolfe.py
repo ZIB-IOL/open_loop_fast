@@ -1,5 +1,5 @@
-from all_functions.auxiliary_functions import fd
-from all_functions.feasible_region import away_oracle, vertex_among_active_vertices
+from src.auxiliary_functions import fd
+from src.feasible_region import away_oracle, vertex_among_active_vertices
 
 import autograd.numpy as np
 
@@ -9,7 +9,7 @@ def frank_wolfe(feasible_region,
                 step: dict,
                 n_iters: int = 100,
                 store_iterates: bool = False):
-    """Performs Frank-Wolfe/the herding algorithm.
+    """Performs Frank-Wolfe.
 
         Args:
             feasible_region:
@@ -54,21 +54,14 @@ def frank_wolfe(feasible_region,
     x_p_list = []
 
     for i in range(1, n_iters):
-        if isinstance(x, np.ndarray):
-            gradient = objective_function.evaluate_gradient(x)
-            p_fw, fw_gap, x_p = feasible_region.linear_minimization_oracle(gradient, x)
-            x_p_list.append(x_p)
-            try:
-                scalar = objective_function.compute_step_size(i, x, p_fw, gradient, step=step)
-            except:
-                break
-        else:
-            p_fw, fw_gap = feasible_region.linear_minimization_oracle(objective_function, x)
-            scalar = objective_function.compute_step_size(i, x, p_fw, step=step)
-        if isinstance(x, np.ndarray):
-            x = (1 - scalar) * x.flatten() + scalar * p_fw.flatten()
-        else:
-            x.update(p_fw, scalar=scalar)
+        gradient = objective_function.evaluate_gradient(x)
+        p_fw, fw_gap, x_p = feasible_region.linear_minimization_oracle(gradient, x)
+        x_p_list.append(x_p)
+        try:
+            scalar = objective_function.compute_step_size(i, x, p_fw, gradient, step=step)
+        except:
+            break
+        x = (1 - scalar) * x.flatten() + scalar * p_fw.flatten()
         loss = objective_function.evaluate_loss(x)
         if store_iterates:
             iterate_list.append(x)
@@ -82,7 +75,7 @@ def away_step_frank_wolfe(feasible_region,
                           step: dict,
                           n_iters: int = 100,
                           store_iterats: bool = False):
-    """Performs Away-Step Frank-Wolfe.
+    """Performs away-step Frank-Wolfe.
 
         Args:
             feasible_region:
@@ -211,7 +204,7 @@ def decomposition_invariant_frank_wolfe(feasible_region,
                                         n_iters: int = 100,
                                         epsilon: float = 1e-16,
                                         store_iterates: bool = False):
-    """Performs Decomposition-Invariant Frank-Wolfe.
+    """Performs decomposition-invariant Frank-Wolfe.
 
         Args:
             feasible_region:

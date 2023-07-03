@@ -1,8 +1,9 @@
-# Acceleration of Frank-Wolfe Algorithms with Open-Loop Step-Sizes
+# Affine-Invariant Convergence Rates of the Frank-Wolfe Algorithm with Open-Loop Step-Sizes
 
 ## References
 This project is an extension of the previously published Git repository
 [open_loop_fw](https://github.com/ZIB-IOL/open_loop_fw), which contains the code to the following paper:
+
 Wirth, E., Pokutta, S., and Kerdreux, T. (2023). Acceleration of Frank-Wolfe Algorithms with Open-Loop Step-Sizes. 
 In Proceedings of AISTATS.
 

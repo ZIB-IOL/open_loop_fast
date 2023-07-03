@@ -1,11 +1,16 @@
 import autograd.numpy as np
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
-from all_functions.feasible_region import lpnorm, UnitSimplex, LpBall, NuclearNormBall
-from all_functions.objective_function import SquaredLossFinDim, LogisticLossFinDim, \
-    HuberLossCollaborativeFilteringFinDim
+from src.feasible_region import lpnorm, UnitSimplex, LpBall, NuclearNormBall
+from src.objective_function import SquaredLoss, LogisticLoss, \
+    HuberLossCollaborativeFiltering
 
 import os
+
+
+
+
+
 
 
 def polytope_experiment(dimension: int, rho: float):
@@ -28,7 +33,7 @@ def polytope_experiment(dimension: int, rho: float):
 
     b = b * rho
 
-    objective_function = SquaredLossFinDim(A=A, b=b)
+    objective_function = SquaredLoss(A=A, b=b)
     feasible_region = UnitSimplex(dimension=dimension)
     return feasible_region, objective_function
 
@@ -49,7 +54,7 @@ def probability_simplex_interior_fast_ls_ss(dimension):
     b = np.ones((dimension, 1))
     b = b / lpnorm(b, p=1)
 
-    objective_function = SquaredLossFinDim(A=A, b=b)
+    objective_function = SquaredLoss(A=A, b=b)
     feasible_region = UnitSimplex(dimension=dimension)
     return feasible_region, objective_function
 
@@ -85,7 +90,7 @@ def uniformly_convex(dimension, p=2, location: str = "interior", convexity: str 
 
     b = A.dot(x)
 
-    objective_function = SquaredLossFinDim(A=A, b=b)
+    objective_function = SquaredLoss(A=A, b=b)
     feasible_region = LpBall(dimension=dimension, p=p)
 
     if location == "exterior":
@@ -109,7 +114,7 @@ def uniformly_convex_logistic_regression(samples, dimension, p=2):
     # # Add a bias term
     # A = np.hstack((np.ones((A.shape[0], 1)), A))
 
-    objective_function = LogisticLossFinDim(A=A, b=b)
+    objective_function = LogisticLoss(A=A, b=b)
     feasible_region = LpBall(dimension=A.shape[1], p=p)
 
     return feasible_region, objective_function
@@ -136,7 +141,7 @@ def gisette(p=2):
     m, n = A.shape
     print("Dimensions: ", (m, n))
 
-    objective_function = LogisticLossFinDim(A=A, b=b)
+    objective_function = LogisticLoss(A=A, b=b)
     feasible_region = LpBall(dimension=A.shape[1], p=p)
 
     return feasible_region, objective_function
@@ -160,7 +165,7 @@ def movielens(radius: int = 5000):
     m, n = A.shape
     print("Dimensions: ", (m, n))
 
-    objective_function = HuberLossCollaborativeFilteringFinDim(A=A)
+    objective_function = HuberLossCollaborativeFiltering(A=A)
     feasible_region = NuclearNormBall(m, n, radius=radius)
 
 
