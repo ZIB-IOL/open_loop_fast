@@ -2,7 +2,7 @@
 
 import random
 import autograd.numpy as np
-from src.plotting import primal_gap_plotter, determine_y_lims, only_min
+from src.plotting import gap_plotter, determine_y_lims, only_min
 from src.problem_settings import movielens
 from src.experiments_auxiliary_functions import run_experiment
 from global_ import *
@@ -41,14 +41,14 @@ for radius in radii:
                                          pafw_step_size_rules=pafw_step_size_rules)
 
     primal_gaps = only_min(primal_gaps)
-    primal_gap_plotter(y_data=primal_gaps,
-                       labels=labels,
-                       iterations=ITERATIONS_MOVIELENS,
-                       file_name=file_name,
-                       x_lim=(1, ITERATIONS_MOVIELENS),
-                       y_lim=determine_y_lims(primal_gaps),
-                       y_label=r'$\mathrm{min}_i  \ h_i$',
-                       directory="experiments/figures/movielens_nuclear_norm_ball_collaborative_filtering",
-                       legend=legend,
-                       legend_location="lower left"
-                       )
+    gap_plotter(y_data=primal_gaps,
+                labels=labels,
+                iterations=ITERATIONS_MOVIELENS,
+                file_name=file_name,
+                x_lim=(1, ITERATIONS_MOVIELENS),
+                y_lim=determine_y_lims(primal_gaps),
+                y_label=r'$\mathrm{min}_i  \ h_i$',
+                directory="experiments/figures/movielens_nuclear_norm_ball_collaborative_filtering",
+                legend=legend,
+                legend_location="lower left"
+                )

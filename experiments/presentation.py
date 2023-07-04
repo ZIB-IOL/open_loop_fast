@@ -9,7 +9,7 @@ from src.problem_settings import polytope_experiment, gisette, uniformly_convex,
 from src.auxiliary_functions import distribution_to_string
 from src.feasible_region import HilbertSpaceWhaba
 from src.objective_function import confirm_rho_distribution, mu_from_rho, SquaredLoss
-from src.plotting import primal_gap_plotter, determine_y_lims, only_min
+from src.plotting import gap_plotter, determine_y_lims, only_min
 from src.experiments_auxiliary_functions import run_experiment
 
 
@@ -36,16 +36,16 @@ for rho in rhos:
 
     labels = ["line-search", "open-loop"]
     primal_gaps = only_min(primal_gaps)
-    primal_gap_plotter(y_data=primal_gaps,
-                       labels=labels,
-                       iterations=ITERATIONS,
-                       file_name=file_name,
-                       x_lim=(1, ITERATIONS),
-                       y_lim=determine_y_lims(primal_gaps),
-                       y_label=r'$\mathrm{min}_i  \ h_i$',
-                       directory="experiments/figures/presentation",
-                       legend=legend
-                       )
+    gap_plotter(y_data=primal_gaps,
+                labels=labels,
+                iterations=ITERATIONS,
+                file_name=file_name,
+                x_lim=(1, ITERATIONS),
+                y_lim=determine_y_lims(primal_gaps),
+                y_label=r'$\mathrm{min}_i  \ h_i$',
+                directory="experiments/figures/presentation",
+                legend=legend
+                )
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -88,16 +88,16 @@ for mus in [[None], [mu]]:
                                              fw_step_size_rules=fw_step_size_rules)
         primal_gaps = only_min(primal_gaps)
         labels = ["line-search", "open-loop"]
-        primal_gap_plotter(y_data=primal_gaps,
-                           labels=labels,
-                           iterations=iterations,
-                           file_name=file_name,
-                           x_lim=(1, iterations),
-                           y_lim=determine_y_lims(primal_gaps),
-                           y_label=r'$\mathrm{min}_i  \ h_i$',
-                           directory="experiments/figures/presentation",
-                           legend=legend
-                           )
+        gap_plotter(y_data=primal_gaps,
+                    labels=labels,
+                    iterations=iterations,
+                    file_name=file_name,
+                    x_lim=(1, iterations),
+                    y_lim=determine_y_lims(primal_gaps),
+                    y_label=r'$\mathrm{min}_i  \ h_i$',
+                    directory="experiments/figures/presentation",
+                    legend=legend
+                    )
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -131,16 +131,16 @@ for p in ps:
     primal_gaps, labels = run_experiment(ITERATIONS, objective_function, feasible_region, run_more=RUN_MORE,
                                          fw_step_size_rules=fw_step_size_rules)
     primal_gaps = only_min(primal_gaps)
-    primal_gap_plotter(y_data=primal_gaps,
-                       labels=labels,
-                       iterations=ITERATIONS,
-                       file_name=file_name,
-                       x_lim=(1, ITERATIONS),
-                       y_lim=determine_y_lims(primal_gaps),
-                       y_label=r'$\mathrm{min}_i  \ h_i$',
-                       directory="experiments/figures/presentation",
-                       legend=legend
-                       )
+    gap_plotter(y_data=primal_gaps,
+                labels=labels,
+                iterations=ITERATIONS,
+                file_name=file_name,
+                x_lim=(1, ITERATIONS),
+                y_lim=determine_y_lims(primal_gaps),
+                y_label=r'$\mathrm{min}_i  \ h_i$',
+                directory="experiments/figures/presentation",
+                legend=legend
+                )
 
 
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -187,13 +187,13 @@ for p in ps:
                                          afw_step_size_rules=afw_step_size_rules)
 
     primal_gaps = only_min(primal_gaps)
-    primal_gap_plotter(y_data=primal_gaps,
-                       labels=labels,
-                       iterations=ITERATIONS_GISETTE,
-                       file_name=file_name,
-                       x_lim=(1, ITERATIONS_GISETTE),
-                       y_lim=determine_y_lims(primal_gaps),
-                       y_label=r'$\mathrm{min}_i  \ h_i$',
-                       directory="experiments/figures/presentation",
-                       legend=legend
-                       )
+    gap_plotter(y_data=primal_gaps,
+                labels=labels,
+                iterations=ITERATIONS_GISETTE,
+                file_name=file_name,
+                x_lim=(1, ITERATIONS_GISETTE),
+                y_lim=determine_y_lims(primal_gaps),
+                y_label=r'$\mathrm{min}_i  \ h_i$',
+                directory="experiments/figures/presentation",
+                legend=legend
+                )

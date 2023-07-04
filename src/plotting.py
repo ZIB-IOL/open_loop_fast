@@ -34,28 +34,28 @@ def only_min(data):
     return new_data
 
 
-def primal_gap_plotter(y_data: list,
-                       labels: list,
-                       iterations: int,
-                       directory: str = DIRECTORY,
-                       file_name: str = None,
-                       title: str = None,
-                       x_label: str = 'Number of iterations',
-                       y_label: str = 'Primal gap',
-                       x_scale: str = "log",
-                       y_scale: str = "log",
-                       x_lim: tuple = None,
-                       y_lim: tuple = None,
-                       linewidth: float = LINEWIDTH,
-                       styles: list = STYLES,
-                       colors: list = COLORS,
-                       markers: list = MARKERS,
-                       marker_size: int = MARKER_SIZE,
-                       mark_every: float = MARK_EVERY,
-                       fontsize: int = FONT_SIZE,
-                       fontsize_legend: int = FONT_SIZE_LEGEND,
-                       legend: bool = True,
-                       legend_location: str = "upper right"):
+def gap_plotter(y_data: list,
+                labels: list,
+                iterations: int,
+                directory: str = DIRECTORY,
+                file_name: str = None,
+                title: str = None,
+                x_label: str = 'Number of iterations',
+                y_label: str = 'Primal gap',
+                x_scale: str = "log",
+                y_scale: str = "log",
+                x_lim: tuple = None,
+                y_lim: tuple = None,
+                linewidth: float = LINEWIDTH,
+                styles: list = STYLES,
+                colors: list = COLORS,
+                markers: list = MARKERS,
+                marker_size: int = MARKER_SIZE,
+                n_markers: float = N_MARKERS,
+                fontsize: int = FONT_SIZE,
+                fontsize_legend: int = FONT_SIZE_LEGEND,
+                legend: bool = True,
+                legend_location: str = "upper right"):
     """Plots the data that is passed and saves it under "/DIRECTORY/" + str(file_name) + ".png".
 
     Args:
@@ -92,8 +92,8 @@ def primal_gap_plotter(y_data: list,
             (Default is MARKERS.)
         marker_size: int, Optional
             (Default is MARKER_SIZE.)
-        mark_every: float, Optional
-            (Default is MARK_EVERY.)
+        n_markers: float, Optional
+            (Default is N_MARKERS.)
         fontsize: int, Optional
             (Default is FONT_SIZE.)
         fontsize_legend: int, Optional
@@ -112,11 +112,37 @@ def primal_gap_plotter(y_data: list,
     plt.rcParams['font.serif'] = ['Computer Modern Roman']
     plt.rcParams['text.usetex'] = True
 
+    # for i in range(0, len(y_data)):
+    #     plt.plot(y_data[i], linestyle=styles[i], color=colors[i], label=labels[i], linewidth=linewidth,
+    #              marker=markers[i], markersize=marker_size, markevery=0)
+    #     # plt.plot(y_data[i], linestyle=styles[i], color=colors[i], label=labels[i], linewidth=linewidth,
+    #              # marker=markers[i], markersize=marker_size, markevery=mark_every)
+    #     marker_indices = list(np.logspace(0, np.log10(len(y_data[i])-1), num=n_markers, base=10, dtype=int))
+    #     marker_values = [y_data[i][idx] for idx in marker_indices]
+    #     plt.scatter(marker_indices, marker_values, marker=markers[i], color=colors[i], s=marker_size**2)
+    # if legend:
+    #     plt.legend(fontsize=fontsize_legend, loc=legend_location)
+    # plt.title(title, fontsize=fontsize)
+    # plt.ylabel(y_label, fontsize=fontsize)
+    # plt.xscale(x_scale)
+    # plt.yscale(y_scale)
+    legend_handles = []  # Create a list to store the legend handles
+
     for i in range(0, len(y_data)):
-        plt.plot(y_data[i], linestyle=styles[i], color=colors[i], label=labels[i], linewidth=linewidth,
-                 marker=markers[i], markersize=marker_size, markevery=mark_every)
+        # Plot the line with marker
+        line = plt.plot(y_data[i], linestyle=styles[i], color=colors[i], label=labels[i], linewidth=linewidth, zorder=1)
+
+        marker_indices = list(np.logspace(0, np.log10(len(y_data[i]) - 1), num=n_markers, base=10, dtype=int))
+        marker_values = [y_data[i][idx] for idx in marker_indices]
+        scatter = plt.scatter(marker_indices, marker_values, marker=markers[i], color=colors[i], s=marker_size ** 2,
+                              label=labels[i], edgecolor="black", linewidth=1, zorder=2)
+
+        legend_handles.append((line[0], scatter))  # Append line and scatter plot handles to the list
+
     if legend:
-        plt.legend(fontsize=fontsize_legend, loc=legend_location)
+        # Create the legend with line and marker handles
+        plt.legend(handles=legend_handles, labels=labels, fontsize=fontsize_legend, loc=legend_location)
+
     plt.title(title, fontsize=fontsize)
     plt.ylabel(y_label, fontsize=fontsize)
     plt.xscale(x_scale)

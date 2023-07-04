@@ -1,7 +1,7 @@
 # Comparison of AFW and DIFW when the feasible region is a subset of the Boolean hypercube and the objective is
 # uniformly convex.
 
-from src.plotting import primal_gap_plotter, determine_y_lims, only_min
+from src.plotting import gap_plotter, determine_y_lims, only_min
 from src.problem_settings import polytope_experiment, probability_simplex_interior_fast_ls_ss
 from src.experiments_auxiliary_functions import run_experiment
 from global_ import *
@@ -44,13 +44,13 @@ for rho in rhos:
                                          difw_step_size_rules=difw_step_size_rules)
 
     primal_gaps = only_min(primal_gaps)
-    primal_gap_plotter(y_data=primal_gaps,
-                       labels=labels,
-                       iterations=ITERATIONS_AFW_DIFW,
-                       file_name=file_name,
-                       x_lim=(1, ITERATIONS_AFW_DIFW),
-                       y_lim=determine_y_lims(primal_gaps),
-                       y_label=r'$\mathrm{min}_i  \ h_i$',
-                       directory="experiments/figures/afw_difw",
-                       legend=legend
-                       )
+    gap_plotter(y_data=primal_gaps,
+                labels=labels,
+                iterations=ITERATIONS_AFW_DIFW,
+                file_name=file_name,
+                x_lim=(1, ITERATIONS_AFW_DIFW),
+                y_lim=determine_y_lims(primal_gaps),
+                y_label=r'$\mathrm{min}_i  \ h_i$',
+                directory="experiments/figures/afw_difw",
+                legend=legend
+                )

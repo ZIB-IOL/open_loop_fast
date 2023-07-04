@@ -4,6 +4,23 @@ import autograd.numpy as np
 from scipy import stats
 
 
+def create_reference_line(iterations, constant, exponent):
+    """
+    Creates a list of values of length iterations such that the ith value is constant/i^exponent.
+
+    Args:
+        iterations
+        constant
+        exponent
+
+    Returns:
+        ref_line
+    """
+    ref_line = []
+    for iteration in range(1, iterations+1):
+        ref_line.append(constant/iteration**exponent)
+    return ref_line
+
 def compute_convergence_rates(data, n_iterates):
     """Computes the convergence rate of the data according to the order estimation procedure in [1]
 
@@ -43,8 +60,7 @@ def run_experiment(iterations,
                    difw_step_size_rules: list = [],
                    afw_step_size_rules: list = [],
                    mfw_step_size_rules: list = [],
-                   pafw_step_size_rules: list = [],
-                   optimality_measure: str = "primal"
+                   pafw_step_size_rules: list = []
                    ):
     """
     Minimizes objective_function over feasible_region.
@@ -66,14 +82,14 @@ def run_experiment(iterations,
             The types of MFW step-size rules we want to run. (Default is [].)
         pafw_step_size_rules: list
             The types of PAFW step-size rules we want to run. (Default is [].)
-        optimality_measure: str, Optional
-            Choose from ["primal", "dual", "bestgap"]. (Default is "primal".)
 
     Returns:
-        Returns a list of lists of the chosen optimality measure and a list of labels.
+        Returns primal_data, dual_data, best_gap_data, labels.
     """
     labels = []
-    data = []
+    primal_data = []
+    dual_data = []
+    best_gap_data = []
     for step in fw_step_size_rules:
         current_label = translate_step_types("FW", step)
 
@@ -81,12 +97,17 @@ def run_experiment(iterations,
                                                                         objective_function=objective_function,
                                                                         n_iters=(int(iterations + run_more)),
                                                                         step=step)
-        if optimality_measure == "primal":
-            if run_more == 0:
-                data_list = loss_list
-            else:
-                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
-        data.append(data_list)
+
+        dual_data_list = fw_gap_list
+        best_gap_data_list = loss_list
+        if run_more == 0:
+            primal_data_list = loss_list
+            print("TODO: IMPLEMENT BESTGAP!")
+        else:
+            primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        primal_data.append(primal_data_list)
+        dual_data.append(dual_data_list)
+        best_gap_data.append(best_gap_data_list)
         labels.append(current_label)
     for step in afw_step_size_rules:
         current_label = translate_step_types("AFW", step)
@@ -95,12 +116,16 @@ def run_experiment(iterations,
                                                                                   n_iters=(
                                                                                       int(iterations + run_more)),
                                                                                   step=step)
-        if optimality_measure == "primal":
-            if run_more == 0:
-                data_list = loss_list
-            else:
-                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
-        data.append(data_list)
+        dual_data_list = fw_gap_list
+        best_gap_data_list = loss_list
+        if run_more == 0:
+            primal_data_list = loss_list
+            print("TODO: IMPLEMENT BESTGAP!")
+        else:
+            primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        primal_data.append(primal_data_list)
+        dual_data.append(dual_data_list)
+        best_gap_data.append(best_gap_data_list)
         labels.append(current_label)
     for step in difw_step_size_rules:
         current_label = translate_step_types("DIFW", step)
@@ -109,40 +134,51 @@ def run_experiment(iterations,
             objective_function=objective_function,
             n_iters=(int(iterations + run_more)),
             step=step)
-        if optimality_measure == "primal":
-            if run_more == 0:
-                data_list = loss_list
-            else:
-                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
-        data.append(data_list)
+        dual_data_list = fw_gap_list
+        best_gap_data_list = loss_list
+        if run_more == 0:
+            primal_data_list = loss_list
+            print("TODO: IMPLEMENT BESTGAP!")
+        else:
+            primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        primal_data.append(primal_data_list)
+        dual_data.append(dual_data_list)
+        best_gap_data.append(best_gap_data_list)
         labels.append(current_label)
     for step in mfw_step_size_rules:
         current_label = translate_step_types("MFW", step)
-
         iterate_list, loss_list, fw_gap_list, x, x_p_list = momentum_guided_frank_wolfe(
             feasible_region=feasible_region, objective_function=objective_function,
             n_iters=(int(iterations + run_more)), step=step)
 
-        if optimality_measure == "primal":
-            if run_more == 0:
-                data_list = loss_list
-            else:
-                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
-        data.append(data_list)
+        dual_data_list = fw_gap_list
+        best_gap_data_list = loss_list
+        if run_more == 0:
+            primal_data_list = loss_list
+            print("TODO: IMPLEMENT BESTGAP!")
+        else:
+            primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        primal_data.append(primal_data_list)
+        dual_data.append(dual_data_list)
+        best_gap_data.append(best_gap_data_list)
         labels.append(current_label)
+
     for step in pafw_step_size_rules:
         current_label = translate_step_types("PAFW", step)
-
         iterate_list, loss_list, fw_gap_list, x, x_p_list = primal_averaging_frank_wolfe(
             feasible_region=feasible_region, objective_function=objective_function,
             n_iters=(int(iterations + run_more)), step=step)
 
-        if optimality_measure == "primal":
-            if run_more == 0:
-                data_list = loss_list
-            else:
-                data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
-        data.append(data_list)
+        dual_data_list = fw_gap_list
+        best_gap_data_list = loss_list
+        if run_more == 0:
+            primal_data_list = loss_list
+            print("TODO: IMPLEMENT BESTGAP!")
+        else:
+            primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
+        primal_data.append(primal_data_list)
+        dual_data.append(dual_data_list)
+        best_gap_data.append(best_gap_data_list)
         labels.append(current_label)
 
-    return data, labels
+    return primal_data, dual_data, best_gap_data, labels
