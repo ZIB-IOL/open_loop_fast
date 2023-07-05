@@ -102,7 +102,6 @@ def run_experiment(iterations,
         best_gap_data_list = loss_list
         if run_more == 0:
             primal_data_list = loss_list
-            print("TODO: IMPLEMENT BESTGAP!")
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)

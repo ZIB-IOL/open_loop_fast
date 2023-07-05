@@ -14,7 +14,7 @@ mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
 
-ps = [1.5, 2., 2.5, 3.]
+ps = [1.1, 1.5, 2., 2.5, 3., 5., 7.]
 for p in ps:
     lmbda = 2
     L = 1.
@@ -25,8 +25,8 @@ for p in ps:
         r = 2/p
     elif p < 2:
         alpha = (p-1)/2
-        M = 2/((p-1)*lmbda)
-        r = 1
+        M = 1/(alpha*lmbda)
+        r = 1.
 
 
     A = np.identity(DIMENSION)
@@ -42,9 +42,9 @@ for p in ps:
 
     # TODO :  IMPLEMENT BESTGAP
     print("NEED TO IMPLEMENT BESTGAP")
-    gaps = [primal_gaps[0][:ITERATIONS], dual_gaps[0][:ITERATIONS],
-            [(1/2*dual_gaps[0][i]+1/2*primal_gaps[0][i]) for i in range(0, ITERATIONS)]]
-    labels = ["subopt" + r'$_t$', "gap" + r'$_t$', "bestgap" + r'$_t$']
+    gaps = [primal_gaps[0][:ITERATIONS],
+            [(1/2*dual_gaps[0][i]+1/2*primal_gaps[0][i]) for i in range(0, ITERATIONS-1)], dual_gaps[0][:ITERATIONS]]
+    labels = ["subopt" + r'$_t$', "bestgap" + r'$_t$', "gap" + r'$_t$']
 
     gap_0 = dual_gaps[0][0]
 
@@ -94,8 +94,8 @@ for p in ps:
         colors = ["black", "black"] + COLORS
         markers = ["", ""] + MARKERS
 
-    file_name = ("strong_growth_" + "r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p=" + str(round(p, 2)) +
-                 "lmbda=" + str(round(lmbda, 2)))
+    file_name = ("strong_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p=" + str(round(p, 2)) +
+                 "_lmbda=" + str(round(lmbda, 2)))
 
     gap_plotter(y_data=gaps,
                 labels=labels,
