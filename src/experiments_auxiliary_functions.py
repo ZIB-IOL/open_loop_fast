@@ -4,29 +4,30 @@ import autograd.numpy as np
 from scipy import stats
 
 
+def best_gap_computer(primal_gaps, dual_gaps):
+    """
+    From primal_gaps and dual_gaps, computes best_gaps.
+    """
+    # val_smallest stores min_{k <= t} -f(x_k) + gap_k
+    val_smallest = 10.0**16
+    best_gaps = []
+    for i in range(0, len(primal_gaps)):
+        val_smallest = min(val_smallest, - primal_gaps[i] + dual_gaps[i])
+        best_gaps.append(primal_gaps[i] + val_smallest)
+    return best_gaps
+
+
 def create_reference_line(iterations, constant, exponent):
     """
     Creates a list of values of length iterations such that the ith value is constant/i^exponent.
-
-    Args:
-        iterations
-        constant
-        exponent
-
-    Returns:
-        ref_line
     """
-    ref_line = []
+    ref_line = [constant]
     for iteration in range(1, iterations+1):
         ref_line.append(constant/iteration**exponent)
     return ref_line
 
 def compute_convergence_rates(data, n_iterates):
     """Computes the convergence rate of the data according to the order estimation procedure in [1]
-
-    Args:
-        data
-        n_iterates
 
     References:
         [1] Senning, Jonathan R. "Computing and Estimating the Rate of Convergence" (PDF). gordon.edu.
@@ -41,6 +42,9 @@ def compute_convergence_rates(data, n_iterates):
 
 
 def translate_step_types(current_label, step):
+    """
+    Translates the step types.
+    """
     if step["step type"] == "open-loop":
         current_label = current_label + " " + "open-loop, " + " " + r"$\ell={}$".format(str(int(step["a"])))
     if step["step type"] == "open-loop constant":
@@ -63,7 +67,7 @@ def run_experiment(iterations,
                    pafw_step_size_rules: list = []
                    ):
     """
-    Minimizes objective_function over feasible_region.
+    Minimizes objective_function over the feasible_region.
 
     Args:
         iterations: int
@@ -99,7 +103,7 @@ def run_experiment(iterations,
                                                                         step=step)
 
         dual_data_list = fw_gap_list
-        best_gap_data_list = loss_list
+        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
         else:
@@ -116,10 +120,9 @@ def run_experiment(iterations,
                                                                                       int(iterations + run_more)),
                                                                                   step=step)
         dual_data_list = fw_gap_list
-        best_gap_data_list = loss_list
+        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
-            print("TODO: IMPLEMENT BESTGAP!")
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
@@ -134,10 +137,9 @@ def run_experiment(iterations,
             n_iters=(int(iterations + run_more)),
             step=step)
         dual_data_list = fw_gap_list
-        best_gap_data_list = loss_list
+        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
-            print("TODO: IMPLEMENT BESTGAP!")
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
@@ -151,10 +153,9 @@ def run_experiment(iterations,
             n_iters=(int(iterations + run_more)), step=step)
 
         dual_data_list = fw_gap_list
-        best_gap_data_list = loss_list
+        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
-            print("TODO: IMPLEMENT BESTGAP!")
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
@@ -169,10 +170,9 @@ def run_experiment(iterations,
             n_iters=(int(iterations + run_more)), step=step)
 
         dual_data_list = fw_gap_list
-        best_gap_data_list = loss_list
+        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
-            print("TODO: IMPLEMENT BESTGAP!")
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)

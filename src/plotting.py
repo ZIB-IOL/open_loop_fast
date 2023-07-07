@@ -1,15 +1,19 @@
 import matplotlib.pyplot as plt
 import autograd.numpy as np
 from pathlib import Path
+import matplotlib.lines as mlines
+
+from matplotlib.lines import Line2D
+
 from global_ import *
 
 
-def determine_y_lims(data):
+def determine_y_lims(data, minimum=1e-12):
     """Determines how large the y-axis has to be given the data."""
     max_val = 1e-16
     min_val = 1e+16
     for entry in data:
-        min_val = max(min(min(entry) / 10, min_val), 1e-10)
+        min_val = max(min(min(entry) / 10, min_val), minimum)
         max_val = max(max(entry) * 10, max_val)
     return min_val, max_val
 
@@ -55,7 +59,8 @@ def gap_plotter(y_data: list,
                 fontsize: int = FONT_SIZE,
                 fontsize_legend: int = FONT_SIZE_LEGEND,
                 legend: bool = True,
-                legend_location: str = "upper right"):
+                legend_location: str = "upper right",
+                vertical_lines = None):
     """Plots the data that is passed and saves it under "/DIRECTORY/" + str(file_name) + ".png".
 
     Args:
@@ -102,6 +107,8 @@ def gap_plotter(y_data: list,
             (Default is TRUE.)
         legend_location: str, Optional
             (Default is "upper right".)
+        vertical_lines: list, Optional
+            (Default is None.)
 
     """
     fig = plt.figure()
@@ -112,20 +119,6 @@ def gap_plotter(y_data: list,
     plt.rcParams['font.serif'] = ['Computer Modern Roman']
     plt.rcParams['text.usetex'] = True
 
-    # for i in range(0, len(y_data)):
-    #     plt.plot(y_data[i], linestyle=styles[i], color=colors[i], label=labels[i], linewidth=linewidth,
-    #              marker=markers[i], markersize=marker_size, markevery=0)
-    #     # plt.plot(y_data[i], linestyle=styles[i], color=colors[i], label=labels[i], linewidth=linewidth,
-    #              # marker=markers[i], markersize=marker_size, markevery=mark_every)
-    #     marker_indices = list(np.logspace(0, np.log10(len(y_data[i])-1), num=n_markers, base=10, dtype=int))
-    #     marker_values = [y_data[i][idx] for idx in marker_indices]
-    #     plt.scatter(marker_indices, marker_values, marker=markers[i], color=colors[i], s=marker_size**2)
-    # if legend:
-    #     plt.legend(fontsize=fontsize_legend, loc=legend_location)
-    # plt.title(title, fontsize=fontsize)
-    # plt.ylabel(y_label, fontsize=fontsize)
-    # plt.xscale(x_scale)
-    # plt.yscale(y_scale)
     legend_handles = []  # Create a list to store the legend handles
 
     for i in range(0, len(y_data)):
@@ -138,6 +131,16 @@ def gap_plotter(y_data: list,
                               label=labels[i], edgecolor="black", linewidth=1, zorder=2)
 
         legend_handles.append((line[0], scatter))  # Append line and scatter plot handles to the list
+
+    if vertical_lines is not None:
+        for line in vertical_lines:
+            iteration = line[0]
+            line_label = line[1]
+            if iteration < iterations:
+                vert_line = plt.axvline(x=iteration, color='black', label=line_label)
+                legend_line = mlines.Line2D([], [], color='black')
+                legend_handles = [legend_line] + legend_handles
+                labels = [line_label] + labels
 
     if legend:
         # Create the legend with line and marker handles

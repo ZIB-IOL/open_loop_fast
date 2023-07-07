@@ -1,11 +1,9 @@
 import numpy
 
-
 import autograd.numpy as np
 from autograd import grad
 
 from scipy.special import huber
-
 
 class SquaredLoss:
     """Represents the loss function f(x) = 1/2||Ax - b||^2 + 1/2 lmbda ||x||^2.
@@ -36,6 +34,7 @@ class SquaredLoss:
         self.m, self.n = self.A.shape
         eigenvalues, _ = np.linalg.eigh(self.Asquared)
         self.L = float(np.max([np.max(eigenvalues), 1]))
+        self.min_eigenvalue = float(np.min([np.max(eigenvalues), 1]))
 
         assert self.b.shape[0] == self.m, "Arrays not of correct dimensions."
         self.lmbda = lmbda
@@ -157,7 +156,7 @@ class LogisticLoss:
         self.b = b.flatten()
         self.m, self.n = A.shape
         self.objective = lambda x: np.mean(np.log(1 + np.exp(-self.b * np.dot(self.A, x))))
-        self.L = numpy.linalg.eigvalsh(1/self.m * self.A.T.dot(self.A))[-1]
+        self.L = numpy.linalg.eigvalsh(1 / self.m * self.A.T.dot(self.A))[-1]
 
     def evaluate_loss(self, x: np.ndarray):
         """Evaluates the loss at x."""

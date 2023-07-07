@@ -71,27 +71,28 @@ class LpBall:
             tmp_pos = np.abs(v).argmax()
             sign = np.sign(v[tmp_pos])
             fw_vertex = np.zeros(self.dimension)
-            fw_vertex[tmp_pos] = - sign
-            assert np.linalg.norm(fw_vertex, ord=1) <= 1, "p is not in the feasible region."
+            fw_vertex[tmp_pos] = - sign * self.radius
+            assert np.linalg.norm(fw_vertex, ord=1) <= self.radius, "p is not in the feasible region."
         elif self.p == -1:
             v = v.flatten()
-            fw_vertex = -np.sign(v)
-            assert (np.abs(fw_vertex) <= 1).all(), "p is not in the feasible region."
+            fw_vertex = -np.sign(v) * self.radius
+            assert (np.abs(fw_vertex) <= self.radius).all(), "p is not in the feasible region."
 
         else:
             # The solution to min_||f||_p <= 1 <f,g> is given by f_i = g_i^{q-1}/||g||_q^{q-1}.
             x = x.flatten()
             v = v.flatten()
-            fw_vertex = -np.sign(v) * np.abs(v) ** (self.q - 1) / (
+            fw_vertex = -self.radius * np.sign(v) * np.abs(v) ** (self.q - 1) / (
                     (lpnorm(v, self.q)) ** (self.q - 1))
-            assert abs(lpnorm(fw_vertex, self.p) - 1) < 10e-10, "p is not in the feasible region."
+            fw_vertex = self.radius * fw_vertex / lpnorm(fw_vertex, self.p)
+            assert abs(lpnorm(fw_vertex, self.p) - self.radius) < 10e-10, "p is not in the feasible region."
         fw_gap = float(fd(v).T.dot(fd(x)) - fd(v).T.dot(fd(fw_vertex)))
         distance_iterate_fw_vertex = np.linalg.norm(x.flatten() - fw_vertex.flatten())
         return fw_vertex, fw_gap, distance_iterate_fw_vertex
 
     def membership_oracle(self, x: np.ndarray, epsilon: float = 10e-10):
         """Determines whether x is in the interior, boundary, or exterior of the feasible region."""
-        norm = lpnorm(x, 1)
+        norm = lpnorm(x, self.p)
         if abs(self.radius - norm) <= epsilon:
             return "boundary"
         elif (self.radius - norm) > epsilon:
@@ -102,7 +103,7 @@ class LpBall:
     def initial_point(self):
         """Returns the initial vertex."""
         x = np.zeros((self.dimension, 1))
-        x[0] = 1
+        x[0] = self.radius
         return x
 
 
@@ -112,8 +113,6 @@ class UnitSimplex:
     Args:
         dimension: integer, Optional
             The number of data points. (Default is 400.)
-        radius: float, Optional
-            (Default is 1.0.)
 
     Methods:
         linear_minimization_oracle(v: np.ndarray, x: np.ndarray)
@@ -124,10 +123,8 @@ class UnitSimplex:
             Returns the initial vertex.
     """
 
-    def __init__(self, dimension: int = 400, radius: float = 1.0):
+    def __init__(self, dimension: int = 400):
         self.dimension = dimension
-        self.radius = radius
-        self.diameter = 2 * self.radius
 
     def linear_minimization_oracle(self,
                                    v: np.ndarray,
@@ -159,11 +156,11 @@ class UnitSimplex:
         """Determines whether x is in the interior, boundary, or exterior of the feasible region."""
         norm = lpnorm(x, 1)
         if (x >= -epsilon).all():
-            if abs(self.radius - norm) <= epsilon:
+            if abs(1 - norm) <= epsilon:
                 return "boundary"
-            elif (self.radius - norm) > epsilon:
+            elif (1 - norm) > epsilon:
                 return "interior"
-        elif (self.radius - norm) < epsilon:
+        elif (1 - norm) < epsilon:
             return "exterior"
 
     def initial_point(self):
