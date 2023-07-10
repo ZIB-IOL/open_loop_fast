@@ -22,12 +22,17 @@ for y_norm in [1.0]:
         theta = 1 / 2
         if p >= 2:
             alpha = 1 / p
+            diameter = (2 * DIMENSION)**(1/2-1/p)
             M = L * (mu / alpha) ** (2 / p)
             r = 2 * theta / p
         elif p < 2:
             alpha = (p - 1) / 2
+            diameter = 2
             M = L * mu / alpha
             r = theta
+
+        # incorporates the strong (M, 0)-growth
+        M = max(M, diameter**2 * L)
 
         A = np.identity(DIMENSION)
         y = np.random.random((DIMENSION, 1))
@@ -108,7 +113,7 @@ for y_norm in [1.0]:
                     x_lim=(1, ITERATIONS),
                     y_lim=determine_y_lims(primal_gaps),
                     y_label=("Optimality measure"),
-                    directory="experiments/figures/weak_growth/",
+                    directory="experiments/figures/weak_border_growth/",
                     legend=True,
                     styles=styles,
                     colors=colors,
