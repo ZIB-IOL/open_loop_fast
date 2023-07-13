@@ -61,12 +61,12 @@ def frank_wolfe(feasible_region,
             scalar = objective_function.compute_step_size(i, x, p_fw, gradient, step=step)
         except:
             break
-        x = (1 - scalar) * x.flatten() + scalar * p_fw.flatten()
         loss = objective_function.evaluate_loss(x)
-        if store_iterates:
-            iterate_list.append(x)
         loss_list.append(loss)
         fw_gap_list.append(fw_gap)
+        if store_iterates:
+            iterate_list.append(x)
+        x = (1 - scalar) * x.flatten() + scalar * p_fw.flatten()
     return iterate_list, loss_list, fw_gap_list, x, x_p_list
 
 

@@ -135,6 +135,8 @@ def gap_plotter(y_data: list,
     if vertical_lines is not None:
         for line in vertical_lines:
             iteration = line[0]
+            if iteration > x_lim[1]:
+                iteration = 0
             line_label = line[1]
             if iteration < iterations:
                 vert_line = plt.axvline(x=iteration, color='black', label=line_label)

@@ -1,3 +1,4 @@
+from global_ import *
 from src.frank_wolfe import frank_wolfe, decomposition_invariant_frank_wolfe, away_step_frank_wolfe, \
     momentum_guided_frank_wolfe, primal_averaging_frank_wolfe
 import autograd.numpy as np
@@ -25,6 +26,57 @@ def create_reference_line(iterations, constant, exponent):
     for iteration in range(1, iterations+1):
         ref_line.append(constant/iteration**exponent)
     return ref_line
+
+
+
+def create_reference_lines_automatically(gaps, labels, r, l, c, iterations=ITERATIONS, styles=STYLES, colors=COLORS,
+                                         markers=MARKERS):
+    """
+    Adds the reference convergence lines and all corresponding parameters such that everything is plotting-ready.
+    """
+
+    if r == 1/2:
+        paras_unsorted = [1 / (1 - r), l]
+        gaps_unsorted = [create_reference_line(ITERATIONS, c, 1 / (1 - r)),
+                         create_reference_line(ITERATIONS, c, l)]
+        labels_unsorted = [(r'$ \mathcal{O} (t^{-\frac{1}{1-r}})$'),
+                           (r'$\mathcal{O} (t^{-\ell})$')]
+        styles_unsorted = ["--", ":"]
+        colors = ["black", "black"] + colors
+
+    elif r == 1:
+        paras_unsorted = [2, l]
+        gaps_unsorted = [create_reference_line(iterations, c, 2),
+                         create_reference_line(iterations, c, l)]
+        labels_unsorted = [(r'$\mathcal{O} ( t^{-2})$'), (r'$\mathcal{O} (t^{-\ell})$')]
+        styles_unsorted = ["-.", ":"]
+        colors = ["black", "black"] + colors
+
+    else:
+        paras_unsorted = [1 / (1 - r), 2, l]
+        gaps_unsorted = [create_reference_line(iterations, c, 1 / (1 - r)),
+                         create_reference_line(iterations, c, 2),
+                         create_reference_line(iterations, c, l)]
+        labels_unsorted = [(r'$ \mathcal{O} (t^{-\frac{1}{1-r}})$'), (r'$\mathcal{O} ( t^{-2})$'),
+                           (r'$\mathcal{O} (t^{-\ell})$')]
+        styles_unsorted = ["--", "-.", ":"]
+        colors = ["black", "black", "black"] + colors
+
+    sorted_lists = sorted(zip(paras_unsorted, gaps_unsorted, labels_unsorted, styles_unsorted))
+    paras_sorted, gaps_sorted, labels_sorted, styles_sorted = zip(*sorted_lists)
+
+    # Convert the sorted tuples back to lists
+    gaps_sorted = list(gaps_sorted)
+    labels_sorted = list(labels_sorted)
+    styles_sorted = list(styles_sorted)
+
+    gaps = gaps_sorted + gaps
+    labels = labels_sorted + labels
+    styles = styles_sorted + styles
+
+    markers = ["", ""] + markers
+    return gaps, labels, styles, colors, markers
+
 
 def compute_convergence_rates(data, n_iterates):
     """Computes the convergence rate of the data according to the order estimation procedure in [1]
@@ -181,3 +233,7 @@ def run_experiment(iterations,
         labels.append(current_label)
 
     return primal_data, dual_data, best_gap_data, labels
+
+
+
+

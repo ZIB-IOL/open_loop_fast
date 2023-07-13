@@ -1,7 +1,7 @@
 import autograd.numpy as np
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
-from src.feasible_region import lpnorm, UnitSimplex, LpBall, NuclearNormBall
+from src.feasible_region import lpnorm, ProbabilitySimplex, LpBall, NuclearNormBall
 from src.objective_function import SquaredLoss, LogisticLoss, \
     HuberLossCollaborativeFiltering
 
@@ -34,7 +34,7 @@ def polytope_experiment(dimension: int, rho: float):
     b = b * rho
 
     objective_function = SquaredLoss(A=A, b=b)
-    feasible_region = UnitSimplex(dimension=dimension)
+    feasible_region = ProbabilitySimplex(dimension=dimension)
     return feasible_region, objective_function
 
 
@@ -55,7 +55,7 @@ def probability_simplex_interior_fast_ls_ss(dimension):
     b = b / lpnorm(b, p=1)
 
     objective_function = SquaredLoss(A=A, b=b)
-    feasible_region = UnitSimplex(dimension=dimension)
+    feasible_region = ProbabilitySimplex(dimension=dimension)
     return feasible_region, objective_function
 
 

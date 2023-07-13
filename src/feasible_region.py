@@ -107,7 +107,7 @@ class LpBall:
         return x
 
 
-class UnitSimplex:
+class ProbabilitySimplex:
     """A class used to represent the probability simplex.
 
     Args:
