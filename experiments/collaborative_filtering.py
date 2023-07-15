@@ -7,13 +7,10 @@ import os
 import random
 import autograd.numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
-from src.feasible_region import LpBall, lpnorm, NuclearNormBall
-from src.objective_function import SquaredLoss, LogisticLoss, HuberLossCollaborativeFiltering
+from src.feasible_region import NuclearNormBall
+from src.objective_function import HuberLossCollaborativeFiltering
 from src.plotting import gap_plotter, determine_y_lims
-from src.experiments_auxiliary_functions import run_experiment, create_reference_line, \
-    create_reference_lines_automatically
+from src.experiments_auxiliary_functions import run_experiment, create_reference_lines_automatically
 from global_ import *
 import matplotlib as mpl
 
@@ -36,10 +33,12 @@ for radius in radii:
     feasible_region = NuclearNormBall(m, n, radius=radius)
 
     fw_step_size_rules = [{"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1}]
-    primal_gaps, dual_gaps, best_gaps, _ = run_experiment(ITERATIONS_HARD, objective_function, feasible_region,
-                                                          run_more=RUN_MORE_HARD, fw_step_size_rules=fw_step_size_rules)
+    primal_gaps, dual_gaps, best_gaps, _ = run_experiment(ITERATIONS_COLLABORATIVE_FILTERING, objective_function,
+                                                          feasible_region, run_more=RUN_MORE_COLLABORATIVE_FILTERING,
+                                                          fw_step_size_rules=fw_step_size_rules)
 
-    gaps = [dual_gaps[0][1:ITERATIONS_HARD], best_gaps[0][1:ITERATIONS_HARD], primal_gaps[0][1:ITERATIONS_HARD]]
+    gaps = [dual_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING], best_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING],
+            primal_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING]]
     labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
     gap_0 = dual_gaps[0][0]
     gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
@@ -47,9 +46,9 @@ for radius in radii:
 
     gap_plotter(y_data=gaps,
                 labels=labels,
-                iterations=ITERATIONS_HARD,
+                iterations=ITERATIONS_COLLABORATIVE_FILTERING,
                 file_name=("gaps_" + file_name),
-                x_lim=(1, ITERATIONS_HARD),
+                x_lim=(1, ITERATIONS_COLLABORATIVE_FILTERING),
                 y_lim=determine_y_lims(primal_gaps),
                 y_label=("Optimality measure"),
                 directory="experiments/figures/",
