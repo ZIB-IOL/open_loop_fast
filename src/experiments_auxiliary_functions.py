@@ -43,6 +43,7 @@ def create_reference_lines_automatically(gaps, labels, r, l, c, iterations=ITERA
                            (r'$\mathcal{O} (t^{-\ell})$')]
         styles_unsorted = ["--", ":"]
         colors = ["black", "black"] + colors
+        markers = ["", ""] + markers
 
     elif r == 1:
         paras_unsorted = [2, l]
@@ -51,6 +52,7 @@ def create_reference_lines_automatically(gaps, labels, r, l, c, iterations=ITERA
         labels_unsorted = [(r'$\mathcal{O} ( t^{-2})$'), (r'$\mathcal{O} (t^{-\ell})$')]
         styles_unsorted = ["-.", ":"]
         colors = ["black", "black"] + colors
+        markers = ["", ""] + markers
 
     else:
         paras_unsorted = [1 / (1 - r), 2, l]
@@ -61,6 +63,7 @@ def create_reference_lines_automatically(gaps, labels, r, l, c, iterations=ITERA
                            (r'$\mathcal{O} (t^{-\ell})$')]
         styles_unsorted = ["--", "-.", ":"]
         colors = ["black", "black", "black"] + colors
+        markers = ["", "", ""] + markers
 
     sorted_lists = sorted(zip(paras_unsorted, gaps_unsorted, labels_unsorted, styles_unsorted))
     paras_sorted, gaps_sorted, labels_sorted, styles_sorted = zip(*sorted_lists)
@@ -74,7 +77,7 @@ def create_reference_lines_automatically(gaps, labels, r, l, c, iterations=ITERA
     labels = labels_sorted + labels
     styles = styles_sorted + styles
 
-    markers = ["", ""] + markers
+
     return gaps, labels, styles, colors, markers
 
 

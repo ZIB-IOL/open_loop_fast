@@ -3,8 +3,7 @@ import autograd.numpy as np
 from src.feasible_region import LpBall, lpnorm
 from src.objective_function import SquaredLoss
 from src.plotting import gap_plotter, determine_y_lims
-from src.experiments_auxiliary_functions import run_experiment, create_reference_line, \
-    create_reference_lines_automatically
+from src.experiments_auxiliary_functions import run_experiment, create_reference_lines_automatically
 from global_ import *
 import matplotlib as mpl
 

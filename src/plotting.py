@@ -159,7 +159,7 @@ def gap_plotter(y_data: list,
         plt.ylim(y_lim)
     plt.xlabel(x_label, fontsize=fontsize)
     plt.tick_params(axis='both', which='major', labelsize=fontsize, width=(linewidth / 1.25), length=(2 * linewidth),
-                    direction='in', pad=(2.5 * linewidth))
+                    direction='in', pad=(4 * linewidth))
     plt.grid(linestyle=':', linewidth=max(int(linewidth / 1.5), 1))
 
     x_num_ticks = iterations + 1
