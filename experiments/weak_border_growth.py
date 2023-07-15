@@ -65,7 +65,7 @@ for y_norm in [1.0]:
                     x_lim=(1, ITERATIONS),
                     y_lim=determine_y_lims(primal_gaps),
                     y_label=("Optimality measure"),
-                    directory="experiments/figures/weak_border_growth/",
+                    directory="experiments/figures/",
                     legend=True,
                     styles=styles,
                     colors=colors,

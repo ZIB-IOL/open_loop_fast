@@ -17,7 +17,7 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
-ps = [1.0, 2.0]
+ps = [1.0, 2.0, 5.0]
 locations = ["interior", "border", "exterior"]
 
 l = 4
@@ -32,7 +32,8 @@ for p in ps:
 
     # Perform Z-score normalization on feature matrix A
     A = scaler_A.fit_transform(A)
-    print("A.shape: ", A.shape)
+    m, n = A.shape
+    print("Dimensions: ", (m, n))
     # Perform Z-score normalization on target variable y
     b = scaler_y.fit_transform(y.reshape(-1, 1)).flatten()
 
@@ -79,7 +80,7 @@ for p in ps:
                 x_lim=(1, ITERATIONS),
                 y_lim=determine_y_lims(primal_gaps),
                 y_label=y_label,
-                directory="experiments/figures/regression/",
+                directory="experiments/figures/",
                 legend=True,
                 styles=styles,
                 colors=colors,
@@ -95,7 +96,7 @@ for p in ps:
                 x_lim=(1, ITERATIONS),
                 y_lim=determine_y_lims(primal_gaps),
                 y_label=y_label,
-                directory="experiments/figures/regression/",
+                directory="experiments/figures/",
                 legend=True,
                 styles=styles,
                 colors=colors,
@@ -111,7 +112,7 @@ for p in ps:
                 x_lim=(1, ITERATIONS),
                 y_lim=determine_y_lims(primal_gaps),
                 y_label=y_label,
-                directory="experiments/figures/regression/",
+                directory="experiments/figures/",
                 legend=True,
                 styles=styles,
                 colors=colors,

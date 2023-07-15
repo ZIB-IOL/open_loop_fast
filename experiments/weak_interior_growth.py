@@ -63,7 +63,7 @@ for rho_tilde in rho_tildes:
                     x_lim=(1, ITERATIONS),
                     y_lim=determine_y_lims(primal_gaps),
                     y_label=("Optimality measure"),
-                    directory="experiments/figures/weak_interior_growth/",
+                    directory="experiments/figures/",
                     legend=True,
                     styles=styles,
                     colors=colors,
