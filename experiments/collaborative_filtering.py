@@ -20,8 +20,9 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
+
+radii = [1000, 2000, 3000]
 l = 4
-radii = [1000, 3000]
 for radius in radii:
     data = pd.read_csv(os.path.dirname(__file__) + '/../datasets/movielens100k.csv',
                        names=['user id', 'item id', 'rating', 'timestamp'])

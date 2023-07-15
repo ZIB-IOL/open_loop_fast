@@ -14,12 +14,13 @@ mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
 ps = [1.02, 1.1, 1.5, 2., 3., 7.]
+L = 1.
+l = 4
+mu = np.sqrt(2)
+theta = 1 / 2
 for y_norm in [1.0]:
     for p in ps:
-        L = 1.
-        l = 4
-        mu = np.sqrt(2)
-        theta = 1 / 2
+        assert p >= 1, "Only consider lp-balls with p>= 1."
         if p >= 2:
             alpha = 1 / p
             diameter = (2 * DIMENSION)**(1/2-1/p)
@@ -51,7 +52,7 @@ for y_norm in [1.0]:
         labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
         gap_0 = dual_gaps[0][0]
         gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, r, l, gap_0)
-        file_name = (("weak_border_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p=" + str(round(p, 2))) +
+        file_name = (("weak_boundary_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p=" + str(round(p, 2))) +
                      "_y_norm=" + str(y_norm) + "_l=" + str(l))
 
         S = int(max(np.int64(np.ceil(M * l / 2 - l)), 0))

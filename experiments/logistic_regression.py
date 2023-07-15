@@ -21,9 +21,10 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
-l = 4
 ps = [1.]
+l = 4
 for p in ps:
+    assert p >= 1, "Only consider lp-balls with p>= 1."
     A = np.loadtxt(os.path.dirname(__file__) + '/../datasets/gisette/gisette_train.data')
     A = A[:2000, :]
     b = np.loadtxt(os.path.dirname(__file__) + '/../datasets/gisette/gisette_train.labels')

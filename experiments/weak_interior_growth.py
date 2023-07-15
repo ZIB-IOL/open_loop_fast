@@ -13,24 +13,27 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
-ps = [1, 2]
 rho_tildes = [0.1, 0.5, 0.9]
+ps = [1, 2]
+
+L = 1.
+l = 4
+mu = np.sqrt(2)
+theta = 1 / 2
+r = 2 * theta
 for rho_tilde in rho_tildes:
     for p in ps:
-        L = 1.
-        l = 4
-        mu = np.sqrt(2)
-        theta = 1 / 2
-        r = 2 * theta
-        diameter = 2
+        assert p >= 1, "Only consider lp-balls with p>= 1."
         if p == 1:
+            diameter = 2
             rho = rho_tilde / np.sqrt(DIMENSION)
         elif p == 2:
+            diameter = 2
             rho = rho_tilde
         else:
-            print("Only l1- and l2-ball are implemented.")
+            print("Only l1- and l2-balls are implemented.")
 
-        M = 4 * mu ** 2 * DIMENSION / rho ** 2
+        M = L * diameter**2 * mu**2 / rho**2
         M = max(M, diameter ** 2 * L)
 
         A = np.identity(DIMENSION)

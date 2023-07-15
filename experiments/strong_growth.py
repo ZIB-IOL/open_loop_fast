@@ -17,9 +17,10 @@ mpl.rcParams['axes.linewidth'] = LINEWIDTH
 ps = [1.01, 1.1, 2., 2.5, 3., 7.]
 lmbdas = [0.2]
 l = 4
+L = 1.
 for lmbda in lmbdas:
     for p in ps:
-        L = 1.
+        assert p >= 1, "Only consider lp-balls with p>= 1."
         if p >= 2:
             alpha = 1/p
             diameter = (2 * DIMENSION)**(1/2-1/p)
@@ -30,7 +31,7 @@ for lmbda in lmbdas:
         elif p < 2:
             alpha = (p-1)/2
             diameter = 2
-            M = L/(alpha*lmbda)
+            M = L*(alpha*lmbda)**(-1)
             r = 1.
             y = np.random.random((DIMENSION, 1))
             y = (lmbda + 1) * y / lpnorm(y, 2)

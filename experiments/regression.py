@@ -18,10 +18,11 @@ mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
 ps = [1.0, 2.0, 5.0]
-locations = ["interior", "border", "exterior"]
+locations = ["interior", "boundary", "exterior"]
 
 l = 4
 for p in ps:
+    assert p >= 1, "Only consider lp-balls with p>= 1."
     boston = load_boston()
     A = boston.data
     y = boston.target
@@ -48,7 +49,7 @@ for p in ps:
     for location in locations:
         if location == "interior":
             radius = optimum_norm * 3/2
-        elif location == "border":
+        elif location == "boundary":
             radius = optimum_norm * 1
         elif location == "exterior":
             radius = optimum_norm * 1/2
