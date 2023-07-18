@@ -30,21 +30,26 @@ Navigate to ~/tmp
 To perform the experiments in the paper:
 
 ```python3 script
->>> python3 -m experiments.exterior
+>>> python3 -m experiments.collaborative_filtering
+```
+```python3 script
+>>> python3 -m experiments.logistic_regression
 ```
 ```python3 script
 >>> python3 -m experiments.polytope
 ```
 ```python3 script
->>> python3 -m experiments.kernel_herding
+>>> python3 -m experiments.regression
 ```
 ```python3 script
->>> python3 -m experiments.gisette
+>>> python3 -m experiments.strong_growth
 ```
 ```python3 script
->>> python3 -m experiments.movielens
+>>> python3 -m experiments.weak_boundary_growth
 ```
-
+```python3 script
+>>> python3 -m experiments.weak_interior_growth
+```
 
 
 The experiments are then stored in ~/tmp/experiments/figures.
