@@ -24,12 +24,12 @@ for lmbda in lmbdas:
         if p >= 2:
             alpha = 1/p
             diameter = (2 * DIMENSION)**(1/2-1/p)
-            M = L * (alpha*lmbda)**(-2/p)
+            M = L * (DIMENSION**(p/2-1)*alpha*lmbda)**(-2/p)
             r = 2/p
             y = np.random.random((DIMENSION, 1))
             y = (lmbda + DIMENSION**(1/2 - 1/p)) * y / lpnorm(y, 2)
         elif p < 2:
-            alpha = (p-1)/2
+            alpha = (p - 1) * DIMENSION**(1/2-1/p) / 2
             diameter = 2
             M = L*(alpha*lmbda)**(-1)
             r = 1.
@@ -54,7 +54,7 @@ for lmbda in lmbdas:
         file_name = ("strong_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p=" + str(round(p, 2)) +
                      "_lmbda=" + str(round(lmbda, 2)) + "_l=" + str(l))
 
-        S = int(max(np.int64(np.ceil(M*l/2 - l)), 0))
+        S = int(max(np.int64(np.ceil(M*l/2 - l)), 1))
         S_label = "S = " + str(S)
         lines = [(S, S_label)]
 

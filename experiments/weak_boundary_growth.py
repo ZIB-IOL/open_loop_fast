@@ -24,10 +24,10 @@ for y_norm in [1.0]:
         if p >= 2:
             alpha = 1 / p
             diameter = (2 * DIMENSION)**(1/2-1/p)
-            M = L * (mu / alpha) ** (2 / p)
+            M = L * (mu / (alpha*DIMENSION**(p/2-1))) ** (2 / p)
             r = 2 * theta / p
         elif p < 2:
-            alpha = (p - 1) / 2
+            alpha = (p - 1) * DIMENSION**(1/2-1/p) / 2
             diameter = 2
             M = L * mu / alpha
             r = theta
@@ -55,7 +55,7 @@ for y_norm in [1.0]:
         file_name = (("weak_boundary_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p=" + str(round(p, 2))) +
                      "_y_norm=" + str(y_norm) + "_l=" + str(l))
 
-        S = int(max(np.int64(np.ceil(M * l / 2 - l)), 0))
+        S = int(max(np.int64(np.ceil(M * l / 2 - l)), 1))
         S_label = "S = " + str(S)
         lines = [(S, S_label)]
 

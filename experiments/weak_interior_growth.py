@@ -55,7 +55,7 @@ for rho_tilde in rho_tildes:
         file_name = (("weak_interior_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p="
                       + str(round(p, 2))) + "_rho=" + str(rho) + "_l=" + str(l))
 
-        S = int(max(np.int64(np.ceil(M * l / 2 - l)), 0))
+        S = int(max(np.int64(np.ceil(M * l / 2 - l)), 1))
         S_label = "S = " + str(S)
         lines = [(S, S_label)]
 

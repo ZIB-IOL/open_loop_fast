@@ -49,7 +49,7 @@ for rho in rhos:
     gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
     file_name = ("polytope_growth" +  "_probability_simplex" + "_rho=" + str(rho) + "_l=" + str(l))
 
-    S = int(max(0, 2*R/l * np.sqrt(8*(L+B)/mu)))
+    S = int(max(1, 2*R/l * np.sqrt(8*(L+B)/mu)))
     S_label = "S = " + str(S)
     lines = [(S, S_label)]
 
