@@ -37,14 +37,11 @@ for y_norm in [1.0]:
             mu = np.sqrt(2)
             theta = 1 / 2
             M = L * (mu/alpha)**(2/p)
+
         M_0 = 4 * L
-        # incorporates the strong (M, 0)-growth
         M = max(M, M_0)
 
         A = np.identity(DIMENSION)
-        y = np.random.random((DIMENSION, 1))
-        # y = np.ones(DIMENSION)
-        y = y / (y_norm * lpnorm(y, p))
 
         objective_function = SquaredLoss(A=A, b=y)
         feasible_region = LpBall(dimension=DIMENSION, p=p)

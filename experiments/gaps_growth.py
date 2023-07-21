@@ -13,32 +13,23 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
-rho_tildes = [0.1, 0.5, 0.9]
-ps = [1, 2]
+rhos = [0.1, 0.5, 0.9]
+ps = [1]
 
-L = 1.
 l = 4
-mu = np.sqrt(2)
-theta = 1 / 2
-r = 2 * theta
-for rho_tilde in rho_tildes:
+for rho in rhos:
     for p in ps:
-        assert p >= 1, "Only consider lp-balls with p>= 1."
-        if p == 1:
-            diameter = 2
-            rho = rho_tilde / np.sqrt(DIMENSION)
-        elif p == 2:
-            diameter = 2
-            rho = rho_tilde
-        else:
-            print("Only l1- and l2-balls are implemented.")
-
-        M = L * diameter**2 * mu**2 / rho**2
-        M = max(M, diameter ** 2 * L)
+        assert p == 1, "Only the l1-ball is implemented at the moment."
+        y = np.random.random((DIMENSION, 1))
+        y = (1-rho) * y / lpnorm(y, p)
+        L = 1.
+        mu = np.sqrt(2) / np.sqrt(DIMENSION)
+        theta = 1 / 2
+        r = theta
+        m = rho / mu
+        M_0 = 4 * L
 
         A = np.identity(DIMENSION)
-        y = np.random.random((DIMENSION, 1))
-        y = (1-rho_tilde) * y / (lpnorm(y, p))
 
         objective_function = SquaredLoss(A=A, b=y)
         feasible_region = LpBall(dimension=DIMENSION, p=p)
@@ -52,10 +43,21 @@ for rho_tilde in rho_tildes:
         labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
         gap_0 = dual_gaps[0][0]
         gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, r, l, gap_0)
-        file_name = (("weak_interior_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p="
+        file_name = (("gaps_growth" + "_r=" + str(round(r, 2)) + "_m=" + str(round(m, 2)) + "_p="
                       + str(round(p, 2))) + "_rho=" + str(rho) + "_l=" + str(l))
 
-        S = int(max(np.int64(np.ceil(M * l / 2 - l)), 1))
+
+        # compute S
+        # TODO: Get explicit formula for S at some point
+        exponent = min(1 / (1 - r), 2)
+        S = 1
+        eta_S = l / (S+l)
+        val = M_0*(l**2)*eta_S/24 - ((M_0 / m) * eta_S)**exponent
+        while val < 0:
+            S += 1
+            eta_S = l / (S + l)
+            val = M_0 * l ** 2 * eta_S / 24 - ((M_0 / m) * eta_S) ** exponent
+
         S_label = "S = " + str(S)
         lines = [(S, S_label)]
 

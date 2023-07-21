@@ -35,12 +35,12 @@ for lmbda in lmbdas:
             y = (lmbda + DIMENSION ** (1 / q - 1 / p)) * y / lpnorm(y, q)
             L = DIMENSION ** (1/2 - 1/p)
             M = L * (alpha*lmbda)**(-2/p)
-        M_0 = 4 * L
 
-        # incorporates the strong (M, 0)-growth
+        M_0 = 4 * L
         M = max(M, M_0)
 
         A = np.identity(DIMENSION)
+
         objective_function = SquaredLoss(A=A, b=y)
         feasible_region = LpBall(dimension=DIMENSION, p=p)
 
