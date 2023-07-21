@@ -13,27 +13,33 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
-ps = [1.02, 1.1, 1.5, 2., 3., 7.]
-L = 1.
+ps = [1.02, 2., 7.]
 l = 4
-mu = np.sqrt(2)
-theta = 1 / 2
 for y_norm in [1.0]:
     for p in ps:
+        q = 1 /(1-1/p)
         assert p >= 1, "Only consider lp-balls with p>= 1."
-        if p >= 2:
-            alpha = 1 / p
-            diameter = (2 * DIMENSION)**(1/2-1/p)
-            M = L * (mu / (alpha*DIMENSION**(p/2-1))) ** (2 / p)
-            r = 2 * theta / p
-        elif p < 2:
-            alpha = (p - 1) * DIMENSION**(1/2-1/p) / 2
-            diameter = 2
-            M = L * mu / alpha
-            r = theta
-
+        if p < 2:
+            alpha = (p - 1) / 2
+            r = 1.
+            y = np.random.random((DIMENSION, 1))
+            y = y / lpnorm(y, p)
+            L = 1.
+            mu = np.sqrt(2)*DIMENSION ** (1/2 - 1/p)
+            theta = 1/2
+            M = L*(mu/alpha)
+        elif p >= 2:
+            alpha = 1/p
+            r = 2 / p
+            y = np.random.random((DIMENSION, 1))
+            y = DIMENSION ** (1 / q - 1 / p) * y / lpnorm(y, p)
+            L = DIMENSION ** (1/2 - 1/p)
+            mu = np.sqrt(2)
+            theta = 1 / 2
+            M = L * (mu/alpha)**(2/p)
+        M_0 = 4 * L
         # incorporates the strong (M, 0)-growth
-        M = max(M, diameter**2 * L)
+        M = max(M, M_0)
 
         A = np.identity(DIMENSION)
         y = np.random.random((DIMENSION, 1))

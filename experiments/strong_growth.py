@@ -17,27 +17,28 @@ mpl.rcParams['axes.linewidth'] = LINEWIDTH
 ps = [1.01, 1.1, 2., 2.5, 3., 7.]
 lmbdas = [0.2]
 l = 4
-L = 1.
 for lmbda in lmbdas:
     for p in ps:
+        q = 1 /(1-1/p)
         assert p >= 1, "Only consider lp-balls with p>= 1."
-        if p >= 2:
-            alpha = 1/p
-            diameter = (2 * DIMENSION)**(1/2-1/p)
-            M = L * (DIMENSION**(p/2-1)*alpha*lmbda)**(-2/p)
-            r = 2/p
-            y = np.random.random((DIMENSION, 1))
-            y = (lmbda + DIMENSION**(1/2 - 1/p)) * y / lpnorm(y, 2)
-        elif p < 2:
-            alpha = (p - 1) * DIMENSION**(1/2-1/p) / 2
-            diameter = 2
-            M = L*(alpha*lmbda)**(-1)
+        if p < 2:
+            alpha = (p - 1) / 2
             r = 1.
             y = np.random.random((DIMENSION, 1))
-            y = (lmbda + 1) * y / lpnorm(y, 2)
+            y = (lmbda + 1) * y / lpnorm(y, q)
+            L = 1.
+            M = L*(alpha*lmbda)**(-1)
+        elif p >= 2:
+            alpha = 1/p
+            r = 2 / p
+            y = np.random.random((DIMENSION, 1))
+            y = (lmbda + DIMENSION ** (1 / q - 1 / p)) * y / lpnorm(y, q)
+            L = DIMENSION ** (1/2 - 1/p)
+            M = L * (alpha*lmbda)**(-2/p)
+        M_0 = 4 * L
 
         # incorporates the strong (M, 0)-growth
-        M = max(M, diameter ** 2 * L)
+        M = max(M, M_0)
 
         A = np.identity(DIMENSION)
         objective_function = SquaredLoss(A=A, b=y)
