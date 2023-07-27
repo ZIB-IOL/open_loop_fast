@@ -49,14 +49,15 @@ for rho in rhos:
 
         # compute S
         # TODO: Get explicit formula for S at some point
-        exponent = min(1 / (1 - r), 2)
+        k = min(1 / (1 - r), 2)
         S = 1
         eta_S = l / (S+l)
-        val = M_0*(l**2)*eta_S/24 - ((M_0 / m) * eta_S)**exponent
+        val = eta_S - eta_S**k*(1+2/M_0 *(9*M_0/(2*m))**(1/(1-r)))
         while val < 0:
             S += 1
             eta_S = l / (S + l)
-            val = M_0 * l ** 2 * eta_S / 24 - ((M_0 / m) * eta_S) ** exponent
+            val = eta_S - eta_S**k*(1+2/M_0 *(9*M_0/(2*m))**(1/(1-r)))
+
 
         S_label = "S = " + str(S)
         lines = [(S, S_label)]
