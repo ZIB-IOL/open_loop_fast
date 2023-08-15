@@ -14,7 +14,7 @@ mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
 
-rhos = [0.05, 0.1, 0.25]
+rhos = [0.1, 0.2, 0.3]
 l = 4
 for rho in rhos:
     y = np.zeros((DIMENSION, 1))
@@ -23,13 +23,14 @@ for rho in rhos:
     random_perturbation[int(DIMENSION / 2):] = 0
     random_perturbation = random_perturbation / lpnorm(random_perturbation, 1)
     y = (1 - rho) * y + rho * random_perturbation
-    offset = np.abs(np.random.random((DIMENSION, 1)))
+    offset = np.ones((DIMENSION,1))
     offset[int(DIMENSION / 2):] = 0
     offset = offset / lpnorm(offset, 1)
     y = y + offset
     y = 2 * y / lpnorm(y, 1)
+    assert np.abs(lpnorm(y, 1) - 2.0)<10**(-6), print("lp norm is: " + str(lpnorm(y, 1)) + " but should be 2.0")
     L = 1.
-    mu = np.sqrt(2) / np.sqrt(DIMENSION)
+    mu = np.sqrt(2) * np.sqrt(DIMENSION)
     theta = 1 / 2
     r = theta
     # todo: check whether r = theta?
@@ -44,6 +45,7 @@ for rho in rhos:
     M = max(M, M_0)
 
     A = np.identity(DIMENSION)
+
 
     objective_function = SquaredLoss(A=A, b=y)
     feasible_region = LpBall(dimension=DIMENSION, p=1)
@@ -68,6 +70,9 @@ for rho in rhos:
         eta_S = l / (S + l)
         val = eta_S * eta_R - eta_S ** k * (1 + 2 / M * (9 * M / (2 * m)) ** (1 / (1 - theta)))
 
+    # compute S
+    k = min(1 / (1 - r), 2)
+    S = int(max(1, np.ceil(l * ((1 + 2 / M_0 * (9 * M_0 / (2 * m)) ** (1 / (1 - r))) / l) ** (1 / (k - 1)) - l)))
     S_label = "S = " + str(S)
     lines = [(S, S_label)]
 

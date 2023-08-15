@@ -5,6 +5,7 @@ from autograd import grad
 
 from scipy.special import huber
 
+
 class SquaredLoss:
     """Represents the loss function f(x) = 1/2||Ax - b||^2 + 1/2 lmbda ||x||^2.
 

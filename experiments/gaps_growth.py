@@ -13,20 +13,34 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
-rhos = [0.1, 0.5, 0.9]
+rhos = [0.3, 1.0, 1.7]
 ps = [1]
 
 l = 4
 for rho in rhos:
+    dist = (rho + 0.1)/2
     for p in ps:
         assert p == 1, "Only the l1-ball is implemented at the moment."
-        y = np.random.random((DIMENSION, 1))
-        y = (1-rho) * y / lpnorm(y, p)
+        good_vec = False
+        while good_vec == False:
+            y = np.zeros((DIMENSION, 1))
+            y[0] = 1 - dist
+            random_part = np.random.random((DIMENSION-1, 1))
+            y[1:] = (dist-0.1)*random_part/lpnorm(random_part, 1)
+            good_vec = (np.argmax(y) == 0)
+        # y = np.random.random((DIMENSION, 1))
+        # y = (1-rho) * y / lpnorm(y, p)
+        assert lpnorm(y, 1) == 0.9
+        assert np.argmax(y) == 0
+        vertex = np.zeros((DIMENSION, 1))
+        vertex[0] = 1
+        print(lpnorm(y - vertex, 1))
+        assert np.abs(lpnorm(y - vertex, 1) - rho) <= 10**(-6)
         L = 1.
-        mu = np.sqrt(2) / np.sqrt(DIMENSION)
+        mu = np.sqrt(2) * np.sqrt(DIMENSION)
         theta = 1 / 2
         r = theta
-        m = rho / mu
+        m = (rho) / mu
         M_0 = 4 * L
 
         A = np.identity(DIMENSION)
@@ -48,17 +62,8 @@ for rho in rhos:
 
 
         # compute S
-        # TODO: Get explicit formula for S at some point
         k = min(1 / (1 - r), 2)
-        S = 1
-        eta_S = l / (S+l)
-        val = eta_S - eta_S**k*(1+2/M_0 *(9*M_0/(2*m))**(1/(1-r)))
-        while val < 0:
-            S += 1
-            eta_S = l / (S + l)
-            val = eta_S - eta_S**k*(1+2/M_0 *(9*M_0/(2*m))**(1/(1-r)))
-
-
+        S = int(max(1, np.ceil(l*((1 + 2/M_0 * (9*M_0/(2*m))**(1/(1-r)))/l)**(1/(k-1)) - l)))
         S_label = "S = " + str(S)
         lines = [(S, S_label)]
 

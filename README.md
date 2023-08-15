@@ -33,6 +33,9 @@ To perform the experiments in the paper:
 >>> python3 -m experiments.collaborative_filtering
 ```
 ```python3 script
+>>> python3 -m experiments.gaps_growth
+```
+```python3 script
 >>> python3 -m experiments.logistic_regression
 ```
 ```python3 script
@@ -47,9 +50,7 @@ To perform the experiments in the paper:
 ```python3 script
 >>> python3 -m experiments.weak_boundary_growth
 ```
-```python3 script
->>> python3 -m experiments.weak_interior_growth
-```
+
 
 
 The experiments are then stored in ~/tmp/experiments/figures.
