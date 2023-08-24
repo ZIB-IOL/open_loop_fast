@@ -14,79 +14,69 @@ mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
 
-rhos = [0.1, 0.2, 0.3]
+rhos = [0.3, 0.5, 0.7]
+kappas = [2]
 l = 4
-for rho in rhos:
-    y = np.zeros((DIMENSION, 1))
-    y[0] = 1
-    random_perturbation = np.abs(np.random.random((DIMENSION, 1)))
-    random_perturbation[int(DIMENSION / 2):] = 0
-    random_perturbation = random_perturbation / lpnorm(random_perturbation, 1)
-    y = (1 - rho) * y + rho * random_perturbation
-    offset = np.ones((DIMENSION,1))
-    offset[int(DIMENSION / 2):] = 0
-    offset = offset / lpnorm(offset, 1)
-    y = y + offset
-    y = 2 * y / lpnorm(y, 1)
-    assert np.abs(lpnorm(y, 1) - 2.0)<10**(-6), print("lp norm is: " + str(lpnorm(y, 1)) + " but should be 2.0")
-    L = 1.
-    mu = np.sqrt(2) * np.sqrt(DIMENSION)
-    theta = 1 / 2
-    r = theta
-    # todo: check whether r = theta?
-    m = rho /(4*mu)
-    R = 0
-    eta_R = l/(R+l)
-    B = 6
-    M = max(m*((2*B)/(eta_R))**(1-theta), (L+B)/(eta_R**2))
+for kappa in kappas:
+    for rho in rhos:
+        z = np.random.random((DIMENSION, 1))
+        z[0] = 0
+        z[1] = 0
+        z[int(DIMENSION / 2) + 1:] = 0
+        z = rho * z / lpnorm(z, 1)
+        z[1] = (1 - rho)
+        offset = kappa * np.ones((DIMENSION, 1))
+        offset[int(DIMENSION / 2) + 1:] = 0
+        offset[0] = 0
+        y = z + offset
+        # Note that x* = z
+        L = 1.
+        mu = np.sqrt(2) * np.sqrt(DIMENSION)
+        theta = 1 / 2
+        r = theta
+        m = rho /(4*mu)
+        Q = np.ceil(4*L*l * ((4*L*mu/kappa)**(1/theta)))
+        eta_Q = l/(Q+l)
+        B = 2 - rho
+        M = max(m/(eta_Q)*(2*B)**(1-theta), (2*L+B)/(eta_Q**2))
 
-    M_0 = 4 * L
+        M_0 = 4 * L
 
-    M = max(M, M_0)
+        M = max(M, M_0)
 
-    A = np.identity(DIMENSION)
+        A = np.identity(DIMENSION)
 
 
-    objective_function = SquaredLoss(A=A, b=y)
-    feasible_region = LpBall(dimension=DIMENSION, p=1)
+        objective_function = SquaredLoss(A=A, b=y)
+        feasible_region = LpBall(dimension=DIMENSION, p=1)
 
-    fw_step_size_rules = [{"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1}]
-    primal_gaps, dual_gaps, best_gaps, _ = run_experiment(ITERATIONS, objective_function, feasible_region,
-                                                          run_more=RUN_MORE,
-                                                          fw_step_size_rules=fw_step_size_rules)
+        fw_step_size_rules = [{"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1}]
+        primal_gaps, dual_gaps, best_gaps, _ = run_experiment(ITERATIONS, objective_function, feasible_region,
+                                                              run_more=RUN_MORE,
+                                                              fw_step_size_rules=fw_step_size_rules)
 
-    gaps = [dual_gaps[0][1:ITERATIONS], best_gaps[0][1:ITERATIONS], primal_gaps[0][1:ITERATIONS]]
-    labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
-    gap_0 = dual_gaps[0][0]
-    gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
-    file_name = ("polytope_growth" +  "l1_ball_" + "_rho=" + str(rho) + "_l=" + str(l))
+        gaps = [dual_gaps[0][1:ITERATIONS], best_gaps[0][1:ITERATIONS], primal_gaps[0][1:ITERATIONS]]
+        labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
+        gap_0 = dual_gaps[0][0]
+        gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
+        file_name = ("polytope_growth" + "_l1_ball" + "_rho=" + str(rho) + "_kappa=" + str(kappa) + "_l=" + str(l))
 
-    k = min(1 / (1 - r), 2)
-    S = 1
-    eta_S = l / (S + l)
-    val = eta_S*eta_R - eta_S**k*(1+2/M *(9*M/(2*m))**(1/(1-theta)))
-    while val < 0:
-        S += 1
-        eta_S = l / (S + l)
-        val = eta_S * eta_R - eta_S ** k * (1 + 2 / M * (9 * M / (2 * m)) ** (1 / (1 - theta)))
+        # compute S
+        S = int(max(1, np.ceil(2**(1/r)*l*M_0/(m**(1/r)) - l), Q))
+        S_label = "S = " + str(S)
+        lines = [(S, S_label)]
 
-    # compute S
-    k = min(1 / (1 - r), 2)
-    S = int(max(1, np.ceil(l * ((1 + 2 / M_0 * (9 * M_0 / (2 * m)) ** (1 / (1 - r))) / l) ** (1 / (k - 1)) - l)))
-    S_label = "S = " + str(S)
-    lines = [(S, S_label)]
-
-    gap_plotter(y_data=gaps,
-                labels=labels,
-                iterations=ITERATIONS,
-                file_name=("gaps_" + file_name),
-                x_lim=(1, ITERATIONS),
-                y_lim=determine_y_lims(primal_gaps),
-                y_label=("Optimality measure"),
-                directory="experiments/figures/",
-                legend=True,
-                styles=styles,
-                colors=colors,
-                markers=markers,
-                vertical_lines=lines
-                )
+        gap_plotter(y_data=gaps,
+                    labels=labels,
+                    iterations=ITERATIONS,
+                    file_name=("gaps_" + file_name),
+                    x_lim=(1, ITERATIONS),
+                    y_lim=determine_y_lims(primal_gaps),
+                    y_label=("Optimality measure"),
+                    directory="experiments/figures/",
+                    legend=True,
+                    styles=styles,
+                    colors=colors,
+                    markers=markers,
+                    vertical_lines=lines
+                    )

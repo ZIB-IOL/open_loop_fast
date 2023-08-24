@@ -8,7 +8,7 @@ from matplotlib.lines import Line2D
 from global_ import *
 
 
-def determine_y_lims(data, minimum=1e-12):
+def determine_y_lims(data, minimum=1e-10):
     """Determines how large the y-axis has to be given the data."""
     max_val = 1e-16
     min_val = 1e+16

@@ -53,7 +53,7 @@ def frank_wolfe(feasible_region,
     iterate_list = []
     x_p_list = []
 
-    for i in range(1, n_iters):
+    for i in range(0, n_iters):
         gradient = objective_function.evaluate_gradient(x)
         p_fw, fw_gap, x_p = feasible_region.linear_minimization_oracle(gradient, x)
         x_p_list.append(x_p)
