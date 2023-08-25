@@ -14,19 +14,18 @@ mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
 
-rhos = [0.3, 0.5, 0.7]
-kappas = [2]
+rhos = [0.1]
+
+kappas = [0.0001, 0.01, 100]
 l = 4
 for kappa in kappas:
     for rho in rhos:
         z = np.random.random((DIMENSION, 1))
         z[0] = 0
         z[1] = 0
-        z[int(DIMENSION / 2) + 1:] = 0
         z = rho * z / lpnorm(z, 1)
         z[1] = (1 - rho)
         offset = kappa * np.ones((DIMENSION, 1))
-        offset[int(DIMENSION / 2) + 1:] = 0
         offset[0] = 0
         y = z + offset
         # Note that x* = z
@@ -34,11 +33,11 @@ for kappa in kappas:
         mu = np.sqrt(2) * np.sqrt(DIMENSION)
         theta = 1 / 2
         r = theta
-        m = rho /(4*mu)
+        m = rho /((2**(2-theta))*mu)
         Q = np.ceil(4*L*l * ((4*L*mu/kappa)**(1/theta)))
         eta_Q = l/(Q+l)
         B = 2 - rho
-        M = max(m/(eta_Q)*(2*B)**(1-theta), (2*L+B)/(eta_Q**2))
+        M = max(m/eta_Q*((4*B)**(1-theta)), 2*(2*L+B)/eta_Q)
 
         M_0 = 4 * L
 
@@ -62,9 +61,14 @@ for kappa in kappas:
         file_name = ("polytope_growth" + "_l1_ball" + "_rho=" + str(rho) + "_kappa=" + str(kappa) + "_l=" + str(l))
 
         # compute S
-        S = int(max(1, np.ceil(2**(1/r)*l*M_0/(m**(1/r)) - l), Q))
-        S_label = "S = " + str(S)
-        lines = [(S, S_label)]
+        # S = int(max(1, np.ceil(2**(1/r)*l*M/(m**(1/r)) - l), Q))
+        # S_label = "S = " + str(S)
+        # lines = [(S, S_label)]
+
+        # Q_label = "Q = " + str(Q)
+        # lines = [(Q, Q_label)]
+
+        lines = None
 
         gap_plotter(y_data=gaps,
                     labels=labels,
