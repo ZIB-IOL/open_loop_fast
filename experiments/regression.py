@@ -55,13 +55,13 @@ for p in ps:
             radius = optimum_norm * 1/2
         feasible_region = LpBall(dimension=A.shape[1], p=p, radius=radius)
         fw_step_size_rules = [{"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1}]
-        primal_gaps, dual_gaps, primal_dual_gaps, _ = run_experiment(ITERATIONS, objective_function, feasible_region,
-                                                              run_more=RUN_MORE,
+        primal_gaps, dual_gaps, primal_dual_gaps, _ = run_experiment(ITERATIONS_MANY, objective_function, feasible_region,
+                                                              run_more=RUN_MORE_MANY,
                                                               fw_step_size_rules=fw_step_size_rules)
         labels.append(location)
-        all_primal_gaps.append(primal_gaps[0][1:ITERATIONS])
-        all_dual_gaps.append(dual_gaps[0][1:ITERATIONS])
-        all_primal_dual_gaps.append(primal_dual_gaps[0][1:ITERATIONS])
+        all_primal_gaps.append(primal_gaps[0][1:ITERATIONS_MANY])
+        all_dual_gaps.append(dual_gaps[0][1:ITERATIONS_MANY])
+        all_primal_dual_gaps.append(primal_dual_gaps[0][1:ITERATIONS_MANY])
 
     gap_0 = max([max(i) for i in all_dual_gaps])
     all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
@@ -74,9 +74,9 @@ for p in ps:
     y_label = "subopt" + r"$_t$"
     gap_plotter(y_data=all_primal_gaps,
                 labels=labels,
-                iterations=ITERATIONS,
+                iterations=ITERATIONS_MANY,
                 file_name=("subopt_" + file_name),
-                x_lim=(1, ITERATIONS),
+                x_lim=(1, ITERATIONS_MANY),
                 y_lim=determine_y_lims([all_primal_gaps[-1]]),
                 y_label=y_label,
                 directory="experiments/figures/",
@@ -89,9 +89,9 @@ for p in ps:
     y_label = "gap" + r"$_t$"
     gap_plotter(y_data=all_dual_gaps,
                 labels=labels,
-                iterations=ITERATIONS,
+                iterations=ITERATIONS_MANY,
                 file_name=("gap_" + file_name),
-                x_lim=(1, ITERATIONS),
+                x_lim=(1, ITERATIONS_MANY),
                 y_lim=determine_y_lims(all_dual_gaps),
                 y_label=y_label,
                 directory="experiments/figures/",
@@ -104,9 +104,9 @@ for p in ps:
     y_label = "primaldual" + r"$_t$"
     gap_plotter(y_data=all_primal_dual_gaps,
                 labels=labels,
-                iterations=ITERATIONS,
+                iterations=ITERATIONS_MANY,
                 file_name=("primaldual_" + file_name),
-                x_lim=(1, ITERATIONS),
+                x_lim=(1, ITERATIONS_MANY),
                 y_lim=determine_y_lims(all_primal_dual_gaps),
                 y_label=y_label,
                 directory="experiments/figures/",
