@@ -31,6 +31,9 @@ Navigate to ~/tmp
 To perform the experiments in the paper:
 
 ```python3 script
+>>> python3 -m experiments.ablation_study_l
+```
+```python3 script
 >>> python3 -m experiments.collaborative_filtering
 ```
 ```python3 script

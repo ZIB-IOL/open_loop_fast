@@ -39,12 +39,12 @@ for p in ps:
     feasible_region = LpBall(dimension=A.shape[1], p=p)
 
     fw_step_size_rules = [{"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1}]
-    primal_gaps, dual_gaps, best_gaps, _ = run_experiment(ITERATIONS_LOGISTIC_REGRESSION, objective_function, feasible_region,
-                                                          run_more=RUN_MORE_LOGISTIC_REGRESSION,
+    primal_gaps, dual_gaps, primal_dual_gaps, _ = run_experiment(ITERATIONS_FEW, objective_function, feasible_region,
+                                                          run_more=RUN_MORE_FEW,
                                                           fw_step_size_rules=fw_step_size_rules)
 
-    gaps = [dual_gaps[0][1:ITERATIONS_LOGISTIC_REGRESSION], best_gaps[0][1:ITERATIONS_LOGISTIC_REGRESSION],
-            primal_gaps[0][1:ITERATIONS_LOGISTIC_REGRESSION]]
+    gaps = [dual_gaps[0][1:ITERATIONS_FEW], primal_dual_gaps[0][1:ITERATIONS_FEW],
+            primal_gaps[0][1:ITERATIONS_FEW]]
     labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
     gap_0 = dual_gaps[0][0]
     gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
@@ -52,9 +52,9 @@ for p in ps:
 
     gap_plotter(y_data=gaps,
                 labels=labels,
-                iterations=ITERATIONS_LOGISTIC_REGRESSION,
+                iterations=ITERATIONS_FEW,
                 file_name=("gaps_" + file_name),
-                x_lim=(1, ITERATIONS_LOGISTIC_REGRESSION),
+                x_lim=(1, ITERATIONS_FEW),
                 y_lim=determine_y_lims(primal_gaps),
                 y_label=("Optimality measure"),
                 directory="experiments/figures/",

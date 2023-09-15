@@ -5,17 +5,17 @@ import autograd.numpy as np
 from scipy import stats
 
 
-def best_gap_computer(primal_gaps, dual_gaps):
+def primal_dual_computer(primal_gaps, dual_gaps):
     """
-    From primal_gaps and dual_gaps, computes best_gaps.
+    From primal_gaps and dual_gaps, computes primal_dual_gaps.
     """
     # val_smallest stores min_{k <= t} -f(x_k) + gap_k
     val_smallest = 10.0**16
-    best_gaps = []
+    primal_dual_gaps = []
     for i in range(0, len(primal_gaps)):
         val_smallest = min(val_smallest, - primal_gaps[i] + dual_gaps[i])
-        best_gaps.append(primal_gaps[i] + val_smallest)
-    return best_gaps
+        primal_dual_gaps.append(primal_gaps[i] + val_smallest)
+    return primal_dual_gaps
 
 
 def create_reference_line(iterations, constant, exponent):
@@ -34,8 +34,15 @@ def create_reference_lines_automatically(gaps, labels, r, l, c, iterations=ITERA
     """
     Adds the reference convergence lines and all corresponding parameters such that everything is plotting-ready.
     """
+    if r == None and l == None:
+        paras_unsorted = [2]
+        gaps_unsorted = [create_reference_line(iterations, c, 2)]
+        labels_unsorted = [(r'$\mathcal{O} ( t^{-2})$')]
+        styles_unsorted = ["-."]
+        colors = ["black"] + colors
+        markers = [""] + markers
 
-    if r == 1/2:
+    elif r == 1/2:
         paras_unsorted = [1 / (1 - r), l]
         gaps_unsorted = [create_reference_line(ITERATIONS, c, 1 / (1 - r)),
                          create_reference_line(ITERATIONS, c, l)]
@@ -64,6 +71,7 @@ def create_reference_lines_automatically(gaps, labels, r, l, c, iterations=ITERA
         styles_unsorted = ["--", "-.", ":"]
         colors = ["black", "black", "black"] + colors
         markers = ["", "", ""] + markers
+
 
     sorted_lists = sorted(zip(paras_unsorted, gaps_unsorted, labels_unsorted, styles_unsorted))
     paras_sorted, gaps_sorted, labels_sorted, styles_sorted = zip(*sorted_lists)
@@ -143,12 +151,12 @@ def run_experiment(iterations,
             The types of PAFW step-size rules we want to run. (Default is [].)
 
     Returns:
-        Returns primal_data, dual_data, best_gap_data, labels.
+        Returns primal_data, dual_data, primal_dual_data, labels.
     """
     labels = []
     primal_data = []
     dual_data = []
-    best_gap_data = []
+    primal_dual_data = []
     for step in fw_step_size_rules:
         current_label = translate_step_types("FW", step)
 
@@ -158,31 +166,30 @@ def run_experiment(iterations,
                                                                         step=step)
 
         dual_data_list = fw_gap_list
-        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
+        primal_dual_data_list = primal_dual_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
         dual_data.append(dual_data_list)
-        best_gap_data.append(best_gap_data_list)
+        primal_dual_data.append(primal_dual_data_list)
         labels.append(current_label)
     for step in afw_step_size_rules:
         current_label = translate_step_types("AFW", step)
         iterate_list, loss_list, fw_gap_list, x, x_p_list = away_step_frank_wolfe(feasible_region=feasible_region,
                                                                                   objective_function=objective_function,
-                                                                                  n_iters=(
-                                                                                      int(iterations + run_more)),
+                                                                                  n_iters=(int(iterations + run_more)),
                                                                                   step=step)
         dual_data_list = fw_gap_list
-        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
+        primal_dual_data_list = primal_dual_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
         dual_data.append(dual_data_list)
-        best_gap_data.append(best_gap_data_list)
+        primal_dual_data.append(primal_dual_data_list)
         labels.append(current_label)
     for step in difw_step_size_rules:
         current_label = translate_step_types("DIFW", step)
@@ -192,14 +199,14 @@ def run_experiment(iterations,
             n_iters=(int(iterations + run_more)),
             step=step)
         dual_data_list = fw_gap_list
-        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
+        primal_dual_data_list = primal_dual_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
         dual_data.append(dual_data_list)
-        best_gap_data.append(best_gap_data_list)
+        primal_dual_data.append(primal_dual_data_list)
         labels.append(current_label)
     for step in mfw_step_size_rules:
         current_label = translate_step_types("MFW", step)
@@ -208,14 +215,14 @@ def run_experiment(iterations,
             n_iters=(int(iterations + run_more)), step=step)
 
         dual_data_list = fw_gap_list
-        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
+        primal_dual_data_list = primal_dual_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
         dual_data.append(dual_data_list)
-        best_gap_data.append(best_gap_data_list)
+        primal_dual_data.append(primal_dual_data_list)
         labels.append(current_label)
 
     for step in pafw_step_size_rules:
@@ -225,17 +232,17 @@ def run_experiment(iterations,
             n_iters=(int(iterations + run_more)), step=step)
 
         dual_data_list = fw_gap_list
-        best_gap_data_list = best_gap_computer(loss_list, fw_gap_list)
+        primal_dual_data_list = primal_dual_computer(loss_list, fw_gap_list)
         if run_more == 0:
             primal_data_list = loss_list
         else:
             primal_data_list = [loss_list[i] - loss_list[-1] for i in range(len(loss_list))][:iterations]
         primal_data.append(primal_data_list)
         dual_data.append(dual_data_list)
-        best_gap_data.append(best_gap_data_list)
+        primal_dual_data.append(primal_dual_data_list)
         labels.append(current_label)
 
-    return primal_data, dual_data, best_gap_data, labels
+    return primal_data, dual_data, primal_dual_data, labels
 
 
 

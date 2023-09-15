@@ -1,7 +1,7 @@
 
 # Plots
 STYLES = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
-COLORS = ['red', 'blue', 'orange',  'green', 'cyan', 'magenta', 'purple', 'olive', 'tomato']
+COLORS = ['red', 'blue', 'orange',  'green', 'cyan', 'magenta', 'purple', 'olive', 'tomato', "royalblue"]
 
 COLORS_ALTERNATIVE = COLORS[3:]
 COLORS_ALTERNATIVE_2 = COLORS[6:]
@@ -17,10 +17,10 @@ CHUNKSIZE = 10000
 DIMENSION = 100
 ITERATIONS = 100000
 RUN_MORE = 5 * ITERATIONS
-ITERATIONS_LOGISTIC_REGRESSION = 10000
-RUN_MORE_LOGISTIC_REGRESSION = 5 * ITERATIONS_LOGISTIC_REGRESSION
-ITERATIONS_COLLABORATIVE_FILTERING = 10000
-RUN_MORE_COLLABORATIVE_FILTERING = 5 * ITERATIONS_COLLABORATIVE_FILTERING
+ITERATIONS_MANY = 1000000
+RUN_MORE_MANY = 5 * ITERATIONS_MANY
+ITERATIONS_FEW = 10000
+RUN_MORE_FEW = 5 * ITERATIONS_FEW
 
 # Storing of data
 DIRECTORY = "figures"

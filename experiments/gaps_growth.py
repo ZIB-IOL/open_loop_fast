@@ -35,11 +35,11 @@ for rho in rhos:
         feasible_region = LpBall(dimension=DIMENSION, p=p)
 
         fw_step_size_rules = [{"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1}]
-        primal_gaps, dual_gaps, best_gaps, _ = run_experiment(ITERATIONS, objective_function, feasible_region,
+        primal_gaps, dual_gaps, primal_dual_gaps, _ = run_experiment(ITERATIONS, objective_function, feasible_region,
                                                               run_more=RUN_MORE,
                                                               fw_step_size_rules=fw_step_size_rules)
 
-        gaps = [dual_gaps[0][1:ITERATIONS], best_gaps[0][1:ITERATIONS], primal_gaps[0][1:ITERATIONS]]
+        gaps = [dual_gaps[0][1:ITERATIONS], primal_dual_gaps[0][1:ITERATIONS], primal_gaps[0][1:ITERATIONS]]
         labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
         gap_0 = dual_gaps[0][0]
         gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, r, l, gap_0)

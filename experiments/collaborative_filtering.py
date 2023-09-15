@@ -1,7 +1,4 @@
-# References:
-#   [1] F. M. Harper and J. A. Konstan. The MovieLens datasets: History and context. ACM Transactions on Interactive
-#   Intelligent Systems, 5(4):19:1–19:19, 2015.
-
+# Collaborative filtering experiment using the movielens dataset.
 
 import os
 import random
@@ -34,12 +31,12 @@ for radius in radii:
     feasible_region = NuclearNormBall(m, n, radius=radius)
 
     fw_step_size_rules = [{"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1}]
-    primal_gaps, dual_gaps, best_gaps, _ = run_experiment(ITERATIONS_COLLABORATIVE_FILTERING, objective_function,
-                                                          feasible_region, run_more=RUN_MORE_COLLABORATIVE_FILTERING,
+    primal_gaps, dual_gaps, primal_dual_gaps, _ = run_experiment(ITERATIONS_FEW, objective_function,
+                                                          feasible_region, run_more=RUN_MORE_FEW,
                                                           fw_step_size_rules=fw_step_size_rules)
 
-    gaps = [dual_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING], best_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING],
-            primal_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING]]
+    gaps = [dual_gaps[0][1:ITERATIONS_FEW], primal_dual_gaps[0][1:ITERATIONS_FEW],
+            primal_gaps[0][1:ITERATIONS_FEW]]
     labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
     gap_0 = dual_gaps[0][0]
     gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
@@ -47,9 +44,9 @@ for radius in radii:
 
     gap_plotter(y_data=gaps,
                 labels=labels,
-                iterations=ITERATIONS_COLLABORATIVE_FILTERING,
+                iterations=ITERATIONS_FEW,
                 file_name=("gaps_" + file_name),
-                x_lim=(1, ITERATIONS_COLLABORATIVE_FILTERING),
+                x_lim=(1, ITERATIONS_FEW),
                 y_lim=determine_y_lims(primal_gaps),
                 y_label=("Optimality measure"),
                 directory="experiments/figures/",
