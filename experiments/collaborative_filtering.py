@@ -40,7 +40,7 @@ for radius in radii:
 
     gaps = [dual_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING], best_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING],
             primal_gaps[0][1:ITERATIONS_COLLABORATIVE_FILTERING]]
-    labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
+    labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
     gap_0 = dual_gaps[0][0]
     gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
     file_name = ("collaborative_filtering" +  "_radius=" + str(radius) + "_l=" + str(l))

@@ -45,7 +45,7 @@ for p in ps:
 
     gaps = [dual_gaps[0][1:ITERATIONS_LOGISTIC_REGRESSION], best_gaps[0][1:ITERATIONS_LOGISTIC_REGRESSION],
             primal_gaps[0][1:ITERATIONS_LOGISTIC_REGRESSION]]
-    labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
+    labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
     gap_0 = dual_gaps[0][0]
     gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
     file_name = (("logistic_regression" + "_p=" + str(round(p, 2))) + "_l=" + str(l))

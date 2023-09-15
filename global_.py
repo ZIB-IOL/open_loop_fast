@@ -1,10 +1,13 @@
 
 # Plots
 STYLES = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
-COLORS = ['red', 'blue', 'orange',  'green', 'purple', 'magenta', 'cyan', 'olive']
+COLORS = ['red', 'blue', 'orange',  'green', 'cyan', 'magenta', 'purple', 'olive', 'tomato']
+
+COLORS_ALTERNATIVE = COLORS[3:]
+COLORS_ALTERNATIVE_2 = COLORS[6:]
 MARKERS = ['^', 's', 'p', 'X', 'o', 'v', 'D', 'P']
 MARKER_SIZE = 12
-N_MARKERS = 10
+N_MARKERS = 6
 LINEWIDTH = 2
 FONT_SIZE = 32
 FONT_SIZE_LEGEND = 20
@@ -16,7 +19,7 @@ ITERATIONS = 100000
 RUN_MORE = 5 * ITERATIONS
 ITERATIONS_LOGISTIC_REGRESSION = 10000
 RUN_MORE_LOGISTIC_REGRESSION = 5 * ITERATIONS_LOGISTIC_REGRESSION
-ITERATIONS_COLLABORATIVE_FILTERING = 1000
+ITERATIONS_COLLABORATIVE_FILTERING = 10000
 RUN_MORE_COLLABORATIVE_FILTERING = 5 * ITERATIONS_COLLABORATIVE_FILTERING
 
 # Storing of data

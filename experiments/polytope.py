@@ -1,6 +1,6 @@
 import random
 import autograd.numpy as np
-from src.feasible_region import lpnorm, ProbabilitySimplex, LpBall
+from src.feasible_region import lpnorm, LpBall
 from src.objective_function import SquaredLoss
 from src.plotting import gap_plotter, determine_y_lims
 from src.experiments_auxiliary_functions import run_experiment, create_reference_lines_automatically
@@ -55,7 +55,7 @@ for kappa in kappas:
                                                               fw_step_size_rules=fw_step_size_rules)
 
         gaps = [dual_gaps[0][1:ITERATIONS], best_gaps[0][1:ITERATIONS], primal_gaps[0][1:ITERATIONS]]
-        labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
+        labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
         gap_0 = dual_gaps[0][0]
         gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
         file_name = ("polytope_growth" + "_l1_ball" + "_rho=" + str(rho) + "_kappa=" + str(kappa) + "_l=" + str(l))

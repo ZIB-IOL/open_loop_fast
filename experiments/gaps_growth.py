@@ -40,7 +40,7 @@ for rho in rhos:
                                                               fw_step_size_rules=fw_step_size_rules)
 
         gaps = [dual_gaps[0][1:ITERATIONS], best_gaps[0][1:ITERATIONS], primal_gaps[0][1:ITERATIONS]]
-        labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
+        labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
         gap_0 = dual_gaps[0][0]
         gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, r, l, gap_0)
         file_name = (("gaps_growth" + "_r=" + str(round(r, 2)) + "_m=" + str(round(m, 2)) + "_p="

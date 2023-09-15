@@ -2,7 +2,6 @@ import autograd.numpy as np
 from scipy.sparse.linalg import svds
 
 from src.auxiliary_functions import fd
-from src.objective_function import SquaredLoss
 
 
 def lpnorm(vector, p):

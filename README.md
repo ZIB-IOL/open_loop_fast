@@ -1,6 +1,7 @@
 # Affine-Invariant Convergence Rates of the Frank-Wolfe Algorithm with Open-Loop Step-Sizes
 
 ## References
+
 This project is an extension of the previously published Git repository
 [open_loop_fw](https://github.com/ZIB-IOL/open_loop_fw), which contains the code to the following paper:
 

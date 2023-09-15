@@ -3,9 +3,8 @@ import autograd.numpy as np
 from pathlib import Path
 import matplotlib.lines as mlines
 
-from matplotlib.lines import Line2D
-
 from global_ import *
+from src.auxiliary_functions import create_sublist
 
 
 def determine_y_lims(data, minimum=1e-10):
@@ -120,12 +119,17 @@ def gap_plotter(y_data: list,
     plt.rcParams['text.usetex'] = True
 
     legend_handles = []  # Create a list to store the legend handles
+    n_sublists = len(set(markers[:len(labels)])) - 1
+    marker_indices_all = list(np.logspace(0, np.log10(len(y_data[-1]) - 1), num=((n_sublists)*n_markers), base=10,
+                                          dtype=int))
 
     for i in range(0, len(y_data)):
         # Plot the line with marker
         line = plt.plot(y_data[i], linestyle=styles[i], color=colors[i], label=labels[i], linewidth=linewidth, zorder=1)
 
-        marker_indices = list(np.logspace(0, np.log10(len(y_data[i]) - 1), num=n_markers, base=10, dtype=int))
+        # marker_indices = list(np.logspace(0, np.log10(len(y_data[i]) - 1), num=n_markers, base=10, dtype=int))
+        marker_indices = create_sublist(marker_indices_all, n_sublists, i+1)
+        # marker_indices = [idx for idx in marker_indices if idx <= len(y_data[0]) - 1]
         marker_values = [y_data[i][idx] for idx in marker_indices]
         scatter = plt.scatter(marker_indices, marker_values, marker=markers[i], color=colors[i], s=marker_size ** 2,
                               label=labels[i], edgecolor="black", linewidth=1, zorder=2)

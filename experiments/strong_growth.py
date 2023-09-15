@@ -21,14 +21,14 @@ for lmbda in lmbdas:
         q = 1 / (1 - 1 / p)
         assert p >= 1, "Only consider lp-balls with p>= 1."
         if p < 2:
-            alpha = (p - 1) / 2
+            alpha = (p - 1) / 4
             r = 1.
             y = np.random.random((DIMENSION, 1))
             y = (lmbda + 1) * y / lpnorm(y, q)
             L = 1.
             M = L * (alpha * lmbda) ** (-1)
         elif p >= 2:
-            alpha = 1 / p
+            alpha = 1 / (p*2**(p-1))
             r = 2 / p
             y = np.random.random((DIMENSION, 1))
             y = (lmbda + DIMENSION ** (1 / q - 1 / p)) * y / lpnorm(y, q)
@@ -48,7 +48,7 @@ for lmbda in lmbdas:
                                                               run_more=RUN_MORE, fw_step_size_rules=fw_step_size_rules)
 
         gaps = [dual_gaps[0][1:ITERATIONS], best_gaps[0][1:ITERATIONS], primal_gaps[0][1:ITERATIONS]]
-        labels = ["gap" + r'$_t$', "bestgap" + r'$_t$', "subopt" + r'$_t$']
+        labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
         gap_0 = dual_gaps[0][0]
         gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, r, l, gap_0)
         file_name = ("strong_growth" + "_r=" + str(round(r, 2)) + "_M=" + str(round(M, 2)) + "_p=" + str(round(p, 2)) +

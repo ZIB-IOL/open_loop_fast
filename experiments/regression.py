@@ -64,8 +64,8 @@ for p in ps:
         all_best_gaps.append(best_gaps[0][1:ITERATIONS])
 
     gap_0 = max([max(i) for i in all_dual_gaps])
-    all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(all_primal_gaps,
-                                                                                            labels, 1, l, gap_0)
+    all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
+        all_primal_gaps, labels, 1, l, gap_0, colors=COLORS_ALTERNATIVE)
     all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, 1, l, gap_0)
     all_best_gaps, _, _, _, _ = create_reference_lines_automatically(all_best_gaps, labels, 1, l, gap_0)
     file_name = ("regression" + "_p=" + str(round(p, 2)) + "_l=" + str(l))
@@ -104,12 +104,12 @@ for p in ps:
                 markers=markers
                 )
 
-    y_label = "bestgap"
-    y_label = "bestgap" + r"$_t$"
+    y_label = "primaldual"
+    y_label = "primaldual" + r"$_t$"
     gap_plotter(y_data=all_best_gaps,
                 labels=labels,
                 iterations=ITERATIONS,
-                file_name=("bestgap_" + file_name),
+                file_name=("primaldual_" + file_name),
                 x_lim=(1, ITERATIONS),
                 y_lim=determine_y_lims(primal_gaps),
                 y_label=y_label,
