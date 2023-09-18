@@ -65,9 +65,11 @@ for p in ps:
 
     gap_0 = max([max(i) for i in all_dual_gaps])
     all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
-        all_primal_gaps, labels, 1, l, gap_0, colors=COLORS_ALTERNATIVE)
-    all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, 1, l, gap_0)
-    all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, 1, l, gap_0)
+        all_primal_gaps, labels, 1, l, gap_0, iterations=ITERATIONS_MANY, colors=COLORS_ALTERNATIVE)
+    all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, 1, l, gap_0,
+                                                                     iterations=ITERATIONS_MANY)
+    all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, 1, l, gap_0,
+                                                                            iterations=ITERATIONS_MANY)
     file_name = ("regression" + "_p=" + str(round(p, 2)) + "_l=" + str(l))
 
 

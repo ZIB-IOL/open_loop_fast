@@ -46,6 +46,9 @@ To perform the experiments in the paper:
 >>> python3 -m experiments.polytope
 ```
 ```python3 script
+>>> python3 -m experiments.polytope_ls_ol
+```
+```python3 script
 >>> python3 -m experiments.regression
 ```
 ```python3 script
@@ -54,7 +57,5 @@ To perform the experiments in the paper:
 ```python3 script
 >>> python3 -m experiments.weak_boundary_growth
 ```
-
-
 
 The experiments are then stored in ~/tmp/experiments/figures.

@@ -39,7 +39,8 @@ for radius in radii:
             primal_gaps[0][1:ITERATIONS_FEW]]
     labels = ["gap" + r'$_t$', "primaldual" + r'$_t$', "subopt" + r'$_t$']
     gap_0 = dual_gaps[0][0]
-    gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0)
+    gaps, labels, styles, colors, markers = create_reference_lines_automatically(gaps, labels, 1, l, gap_0,
+                                                                                 iterations=ITERATIONS_FEW)
     file_name = ("collaborative_filtering" +  "_radius=" + str(radius) + "_l=" + str(l))
 
     gap_plotter(y_data=gaps,
