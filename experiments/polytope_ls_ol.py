@@ -43,12 +43,10 @@ all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATI
                                                                          feasible_region,
                                                                          run_more=RUN_MORE_MANY,
                                                                          fw_step_size_rules=fw_step_size_rules)
-print(all_primal_gaps)
 all_primal_gaps = [primal_gap[1:ITERATIONS_MANY] for primal_gap in all_primal_gaps]
 all_dual_gaps = [dual_gap[1:ITERATIONS_MANY] for dual_gap in all_dual_gaps]
 all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS_MANY] for primal_dual_gap in all_primal_dual_gaps]
 
-print(all_primal_gaps)
 gap_0 = max([max(i) for i in all_dual_gaps])
 all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
     all_primal_gaps, labels, None, None, gap_0, colors=COLORS_ALTERNATIVE_2)
