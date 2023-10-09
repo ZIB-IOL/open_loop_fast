@@ -13,27 +13,28 @@ np.random.seed(RANDOM)
 mpl.rcParams['agg.path.chunksize'] = CHUNKSIZE
 mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
-ps = [1.5]
+ps = [1.01, 1.5, 2.0, 2.5, 5.0]
 ls = [2, 4]
 lmbda = 0.2
 
 
-fw_step_size_rules = []
-labels = []
-for l in ls:
-    fw_step_size_rules.append({"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1})
-    latex_string = r'$\eta_t = \frac{{{}}}{{{}}}$'.format(l, "t + " + str(l))
-    labels.append(latex_string)
-fw_step_size_rules = fw_step_size_rules + [
-    {"step type": "line-search"},
-    {"step type": "log"}
-]
-labels = labels + [
-    "line-search",
-    "log"
-]
+
 
 for p in ps:
+    fw_step_size_rules = []
+    labels = []
+    for l in ls:
+        fw_step_size_rules.append({"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1})
+        latex_string = r'$\eta_t = \frac{{{}}}{{{}}}$'.format(l, "t + " + str(l))
+        labels.append(latex_string)
+    fw_step_size_rules = fw_step_size_rules + [
+        {"step type": "line-search"},
+        {"step type": "log"}
+    ]
+    labels = labels + [
+        "line-search",
+        "log"
+    ]
     q = 1 / (1 - 1 / p)
     assert p >= 1, "Only consider lp-balls with p>= 1."
     if p < 2:
