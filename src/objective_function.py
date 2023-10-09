@@ -72,7 +72,7 @@ class SquaredLoss:
             step: dict
                 A dictionnary containing the information about the step type. The dictionary can have the following arg-
                 uments:
-                    "step type": Choose from "open-loop", "open-loop constant", "line-search", "line-search afw",
+                    "step type": Choose from "open-loop", "log", "open-loop constant", "line-search", "line-search afw",
                     "short-step afw", "line-search difw probability simplex", "short-step", and
                     "short-step difw probability simplex".
                 Additional Arguments:
@@ -95,6 +95,8 @@ class SquaredLoss:
             c = step["c"]
             d = step["d"]
             optimal_distance = a / (b * iteration ** d + c)
+        elif step_type == "log":
+            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 + np.log(iteration + 1))
         elif step_type == "open-loop constant":
             optimal_distance = step["cst"]
 
@@ -187,7 +189,7 @@ class LogisticLoss:
             step: dict
                 A dictionnary containing the information about the step type. The dictionary can have the following arg-
                 uments:
-                    "step type": Choose from "open-loop", "open-loop constant"
+                    "step type": Choose from "open-loop", "log", "open-loop constant"
                 Additional Arguments:
                     For "open-loop", provide float values for the keys "a", "b", "c", "d" that affect the step type
                     as follows: a / (b * iteration**d + c)
@@ -205,6 +207,8 @@ class LogisticLoss:
             c = step["c"]
             d = step["d"]
             optimal_distance = a / (b * iteration ** d + c)
+        elif step_type == "log":
+            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 + np.log(iteration + 1))
         elif step_type == "open-loop constant":
             optimal_distance = step["cst"]
 
@@ -272,7 +276,7 @@ class HuberLossCollaborativeFiltering:
             step: dict
                 A dictionnary containing the information about the step type. The dictionary can have the following arg-
                 uments:
-                    "step type": Choose from "open-loop", "open-loop constant"
+                    "step type": Choose from "open-loop", "log", "open-loop constant"
                 Additional Arguments:
                     For "open-loop", provide float values for the keys "a", "b", "c", "d" that affect the step type
                     as follows: a / (b * iteration**d + c)
@@ -290,6 +294,8 @@ class HuberLossCollaborativeFiltering:
             c = step["c"]
             d = step["d"]
             optimal_distance = a / (b * iteration ** d + c)
+        elif step_type == "log":
+            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 + np.log(iteration + 1))
         elif step_type == "open-loop constant":
             optimal_distance = step["cst"]
 

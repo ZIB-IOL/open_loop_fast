@@ -1,12 +1,13 @@
-# Affine-Invariant Convergence Rates of the Frank-Wolfe Algorithm with Open-Loop Step-Sizes
+# Fast Open-Loop Step-Size for Frank-Wolfe
 
 ## References
 
 This project is an extension of the previously published Git repository
-[open_loop_fw](https://github.com/ZIB-IOL/open_loop_fw), which contains the code to the following paper:
+[ affine_invariant_open_loop_fw
+Public](https://github.com/ZIB-IOL/affine_invariant_open_loop_fw), which contains the code to the following paper:
 
-Wirth, E., Pokutta, S., and Kerdreux, T. (2023). Acceleration of Frank-Wolfe Algorithms with Open-Loop Step-Sizes. 
-In Proceedings of AISTATS.
+Wirth, E., Pena, J., and Pokutta, S. (2023b). Accelerated affine-invariant convergence rates of the Frank-Wolfe
+algorithm with open-loop step-sizes. arXiv preprint arXiv:2310.04096.
 
 
 ## Installation guide
@@ -20,11 +21,11 @@ Run the command:
 $ conda env create --file environment.yml
 ```
 
-This will create the conda environment affine_invariant_open_loop_fw.
+This will create the conda environment open_loop_fast.
 
 Activate the conda environment with:
 ```shell script
-$ conda activate affine_invariant_open_loop_fw
+$ conda activate open_loop_fast
 ```
 Navigate to ~/tmp
 

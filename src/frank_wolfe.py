@@ -19,7 +19,7 @@ def frank_wolfe(feasible_region,
             step: dict
                 A dictionnary containing the information about the step type. The dictionary can have the following arg-
                 uments:
-                    "step type": Choose from "open-loop", "exact", "line-search", "short-step".
+                    "step type": Choose from "open-loop", "log", "exact", "line-search", "short-step".
                 Additional Arguments:
                     For "open-loop", provide integer values for the keys "a", "b", "c" that affect the step type as
                     follows: a / (b * iteration + c)
