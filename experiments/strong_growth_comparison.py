@@ -75,7 +75,7 @@ for p in ps:
                                                                      iterations=ITERATIONS_MANY)
     all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, None, None, gap_0,
                                                                             iterations=ITERATIONS_MANY)
-    file_name = ("strong_growth_comparison" + "_l1_ball" + "_p=" + str(p) + "_lambda=" + str(lmbda))
+    file_name = ("strong_growth_comparison" + "_lp_ball" + "_p=" + str(p) + "_lambda=" + str(lmbda))
 
     y_label = "subopt" + r"$_t$"
     gap_plotter(y_data=all_primal_gaps,
