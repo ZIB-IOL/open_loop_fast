@@ -132,3 +132,4 @@ dependencies:
   - zipp=3.5.0=pyhd3eb1b0_0
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.4.9=haebb681_0
+prefix: /home/elias/anaconda3/envs/openfw
