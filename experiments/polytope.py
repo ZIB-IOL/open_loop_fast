@@ -15,23 +15,6 @@ mpl.rcParams['axes.linewidth'] = LINEWIDTH
 
 kappa = 0.0001
 rho = 0.1
-ls = [1, 2]
-
-
-fw_step_size_rules = []
-labels = []
-for l in ls:
-    fw_step_size_rules.append({"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1})
-    latex_string = r'$\eta_t = \frac{{{}}}{{{}}}$'.format(l, "t + " + str(l))
-    labels.append(latex_string)
-fw_step_size_rules = fw_step_size_rules + [
-    {"step type": "line-search"},
-    {"step type": "log"}
-]
-labels = labels + [
-    "line-search",
-    "log"
-]
 
 z = np.random.random((DIMENSION, 1))
 z[0] = 0
@@ -45,10 +28,26 @@ A = np.identity(DIMENSION)
 objective_function = SquaredLoss(A=A, b=y)
 feasible_region = LpBall(dimension=DIMENSION, p=1)
 
+step_size_rules = []
+labels = []
+ls = [2, 4]
+for l in ls:
+    step_size_rules.append({"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1})
+    latex_string = r'$\eta_t = \frac{{{}}}{{{}}}$'.format(l, "t + " + str(l))
+    labels.append(latex_string)
+step_size_rules = step_size_rules + [
+    # {"step type": "line-search"},
+    {"step type": "log"}
+]
+labels = labels + [
+    # "line-search",
+    r'$\eta_t = \frac{2+\log(t+1)}{t+2+\log(t+1)}$'
+]
+
 all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS_MANY, objective_function,
                                                                          feasible_region,
                                                                          run_more=RUN_MORE_MANY,
-                                                                         fw_step_size_rules=fw_step_size_rules)
+                                                                         fw_step_size_rules=step_size_rules)
 all_primal_gaps = [primal_gap[1:ITERATIONS_MANY] for primal_gap in all_primal_gaps]
 all_dual_gaps = [dual_gap[1:ITERATIONS_MANY] for dual_gap in all_dual_gaps]
 all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS_MANY] for primal_dual_gap in all_primal_dual_gaps]
@@ -60,7 +59,7 @@ all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, 
                                                                  iterations=ITERATIONS_MANY)
 all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, None, None, gap_0,
                                                                         iterations=ITERATIONS_MANY)
-file_name = ("polytope_ls_ol" + "_l1_ball" + "_rho=" + str(rho) + "_kappa=" + str(kappa))
+file_name = ("polytope" + "_l1_ball" + "_rho=" + str(rho) + "_kappa=" + str(kappa))
 
 y_label = "subopt" + r"$_t$"
 gap_plotter(y_data=all_primal_gaps,

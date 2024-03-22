@@ -1,4 +1,4 @@
-name: affine_invariant_open_loop_fw
+name: openfw
 channels:
   - defaults
   - conda-forge

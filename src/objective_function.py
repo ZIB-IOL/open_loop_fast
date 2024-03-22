@@ -96,7 +96,7 @@ class SquaredLoss:
             d = step["d"]
             optimal_distance = a / (b * iteration ** d + c)
         elif step_type == "log":
-            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 + np.log(iteration + 1))
+            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 +np.log(iteration + 1))
         elif step_type == "open-loop constant":
             optimal_distance = step["cst"]
 
@@ -208,7 +208,7 @@ class LogisticLoss:
             d = step["d"]
             optimal_distance = a / (b * iteration ** d + c)
         elif step_type == "log":
-            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 + np.log(iteration + 1))
+            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 +np.log(iteration + 1))
         elif step_type == "open-loop constant":
             optimal_distance = step["cst"]
 
@@ -295,7 +295,7 @@ class HuberLossCollaborativeFiltering:
             d = step["d"]
             optimal_distance = a / (b * iteration ** d + c)
         elif step_type == "log":
-            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 + np.log(iteration + 1))
+            optimal_distance = (2 + np.log(iteration + 1)) / (iteration + 2 +np.log(iteration + 1))
         elif step_type == "open-loop constant":
             optimal_distance = step["cst"]
 
