@@ -58,7 +58,7 @@ for p in[1.]:
 
     gap_0 = max([max(i) for i in all_dual_gaps])
     all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
-        all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS_MANY, colors=COLORS_ALTERNATIVE_2)
+        all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS_MANY, colors=COLORS)
     all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, None, None, gap_0,
                                                                      iterations=ITERATIONS_MANY)
     all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, None, None,
