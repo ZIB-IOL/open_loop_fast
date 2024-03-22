@@ -174,6 +174,6 @@ def gap_plotter(y_data: list,
     if file_name is not None:
         directory = "./" + directory + "/"
         Path(directory).mkdir(parents=True, exist_ok=True)
-        plt.savefig(directory + str(file_name) + ".png", dpi=300, bbox_inches='tight')
+        plt.savefig(directory + str(file_name) + ".pdf", dpi=300, bbox_inches='tight')
     plt.close()
 
