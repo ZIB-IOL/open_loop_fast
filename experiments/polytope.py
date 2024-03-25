@@ -38,14 +38,14 @@ for l in ls:
     step_size_rules.append({"step type": "open-loop", "a": l, "b": 1, "c": l, "d": 1})
     latex_string = r'$\eta_t = \frac{{{}}}{{{}}}$'.format(l, "t + " + str(l))
     labels.append(latex_string)
-    step_size_rules = step_size_rules + [
-        # {"step type": "line-search"},
-        {"step type": "log"}
-    ]
-    labels = labels + [
-        # "line-search",
-        r'$\eta_t = \frac{2+\log(t+1)}{t+2+\log(t+1)}$'
-    ]
+step_size_rules = step_size_rules + [
+    # {"step type": "line-search"},
+    {"step type": "log"}
+]
+labels = labels + [
+    # "line-search",
+    r'$\eta_t = \frac{2+\log(t+1)}{t+2+\log(t+1)}$'
+]
 
 all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS_MANY, objective_function,
                                                                          feasible_region,
@@ -93,7 +93,9 @@ with open(file_path, 'wb') as file:
 # # Load the serialized data from file
 # with open(file_path, 'rb') as file:
 #     data_loaded = pickle.load(file)
-#
+
+
+
 # # Extract the loaded data
 # file_name = data_loaded["file_name"]
 # all_primal_gaps = data_loaded["all_primal_gaps"]

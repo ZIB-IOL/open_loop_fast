@@ -113,61 +113,61 @@ for dataset in ["boston", "california"]:
             with open(file_path, 'wb') as file:
                 pickle.dump(data_to_save, file)
 
-            # # Load the serialized data from file
-            # with open(file_path, 'rb') as file:
-            #     data_loaded = pickle.load(file)
-            #
-            # # Extract the loaded data
-            # file_name = data_loaded["file_name"]
-            # all_primal_gaps = data_loaded["all_primal_gaps"]
-            # all_dual_gaps = data_loaded["all_dual_gaps"]
-            # all_primal_dual_gaps = data_loaded["all_primal_dual_gaps"]
-            # labels = data_loaded["labels"]
-            # styles = data_loaded["styles"]
-            # colors = data_loaded["colors"]
-            # markers = data_loaded["markers"]
-            #
-            # y_label = "subopt" + r"$_t$"
-            # gap_plotter(y_data=all_primal_gaps,
-            #             labels=labels,
-            #             iterations=ITERATIONS_MANY,
-            #             file_name=("subopt_" + file_name),
-            #             x_lim=(1, ITERATIONS_MANY),
-            #             y_lim=determine_y_lims(all_primal_gaps),
-            #             y_label=y_label,
-            #             directory="experiments/figures/",
-            #             legend=True,
-            #             styles=styles,
-            #             colors=colors,
-            #             markers=markers
-            #             )
-            #
-            # y_label = "gap" + r"$_t$"
-            # gap_plotter(y_data=all_dual_gaps,
-            #             labels=labels,
-            #             iterations=ITERATIONS_MANY,
-            #             file_name=("gap_" + file_name),
-            #             x_lim=(1, ITERATIONS_MANY),
-            #             y_lim=determine_y_lims(all_dual_gaps),
-            #             y_label=y_label,
-            #             directory="experiments/figures/",
-            #             legend=True,
-            #             styles=styles,
-            #             colors=colors,
-            #             markers=markers
-            #             )
-            #
-            # y_label = "primaldual" + r"$_t$"
-            # gap_plotter(y_data=all_primal_dual_gaps,
-            #             labels=labels,
-            #             iterations=ITERATIONS_MANY,
-            #             file_name=("primaldual_" + file_name),
-            #             x_lim=(1, ITERATIONS_MANY),
-            #             y_lim=determine_y_lims(all_primal_dual_gaps),
-            #             y_label=y_label,
-            #             directory="experiments/figures/",
-            #             legend=True,
-            #             styles=styles,
-            #             colors=colors,
-            #             markers=markers
-            #             )
+            # Load the serialized data from file
+            with open(file_path, 'rb') as file:
+                data_loaded = pickle.load(file)
+
+            # Extract the loaded data
+            file_name = data_loaded["file_name"]
+            all_primal_gaps = data_loaded["all_primal_gaps"]
+            all_dual_gaps = data_loaded["all_dual_gaps"]
+            all_primal_dual_gaps = data_loaded["all_primal_dual_gaps"]
+            labels = data_loaded["labels"]
+            styles = data_loaded["styles"]
+            colors = data_loaded["colors"]
+            markers = data_loaded["markers"]
+
+            y_label = "subopt" + r"$_t$"
+            gap_plotter(y_data=all_primal_gaps,
+                        labels=labels,
+                        iterations=ITERATIONS_MANY,
+                        file_name=("subopt_" + file_name),
+                        x_lim=(1, ITERATIONS_MANY),
+                        y_lim=determine_y_lims(all_primal_gaps),
+                        y_label=y_label,
+                        directory="experiments/figures/",
+                        legend=True,
+                        styles=styles,
+                        colors=colors,
+                        markers=markers
+                        )
+
+            y_label = "gap" + r"$_t$"
+            gap_plotter(y_data=all_dual_gaps,
+                        labels=labels,
+                        iterations=ITERATIONS_MANY,
+                        file_name=("gap_" + file_name),
+                        x_lim=(1, ITERATIONS_MANY),
+                        y_lim=determine_y_lims(all_dual_gaps),
+                        y_label=y_label,
+                        directory="experiments/figures/",
+                        legend=True,
+                        styles=styles,
+                        colors=colors,
+                        markers=markers
+                        )
+
+            y_label = "primaldual" + r"$_t$"
+            gap_plotter(y_data=all_primal_dual_gaps,
+                        labels=labels,
+                        iterations=ITERATIONS_MANY,
+                        file_name=("primaldual_" + file_name),
+                        x_lim=(1, ITERATIONS_MANY),
+                        y_lim=determine_y_lims(all_primal_dual_gaps),
+                        y_label=y_label,
+                        directory="experiments/figures/",
+                        legend=True,
+                        styles=styles,
+                        colors=colors,
+                        markers=markers
+                        )

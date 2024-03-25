@@ -46,21 +46,21 @@ for radius in radii:
         r'$\eta_t = \frac{2+\log(t+1)}{t+2+\log(t+1)}$'
     ]
 
-    all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS_MANY, objective_function,
+    all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS, objective_function,
                                                                              feasible_region,
-                                                                             run_more=RUN_MORE_MANY,
+                                                                             run_more=RUN_MORE,
                                                                              fw_step_size_rules=step_size_rules)
-    all_primal_gaps = [primal_gap[1:ITERATIONS_MANY] for primal_gap in all_primal_gaps]
-    all_dual_gaps = [dual_gap[1:ITERATIONS_MANY] for dual_gap in all_dual_gaps]
-    all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS_MANY] for primal_dual_gap in all_primal_dual_gaps]
+    all_primal_gaps = [primal_gap[1:ITERATIONS] for primal_gap in all_primal_gaps]
+    all_dual_gaps = [dual_gap[1:ITERATIONS] for dual_gap in all_dual_gaps]
+    all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS] for primal_dual_gap in all_primal_dual_gaps]
 
     gap_0 = max([max(i) for i in all_dual_gaps])
     all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
-        all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS_MANY, colors=COLORS)
+        all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS, colors=COLORS)
     all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, None, None, gap_0,
-                                                                     iterations=ITERATIONS_MANY)
+                                                                     iterations=ITERATIONS)
     all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, None, None,
-                                                                            gap_0, iterations=ITERATIONS_MANY)
+                                                                            gap_0, iterations=ITERATIONS)
     file_name = ("collaborative_filtering" +  "_radius=" + str(radius))
 
     # Prepare the data to be saved, now including styles, colors, and markers
