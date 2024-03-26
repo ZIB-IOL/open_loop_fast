@@ -46,21 +46,21 @@ for radius in radii:
         r'$\eta_t = \frac{2+\log(t+1)}{t+2+\log(t+1)}$'
     ]
 
-    all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS, objective_function,
+    all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS_FEW, objective_function,
                                                                              feasible_region,
-                                                                             run_more=RUN_MORE,
+                                                                             run_more=RUN_MORE_FEW,
                                                                              fw_step_size_rules=step_size_rules)
-    all_primal_gaps = [primal_gap[1:ITERATIONS] for primal_gap in all_primal_gaps]
-    all_dual_gaps = [dual_gap[1:ITERATIONS] for dual_gap in all_dual_gaps]
-    all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS] for primal_dual_gap in all_primal_dual_gaps]
+    all_primal_gaps = [primal_gap[1:ITERATIONS_FEW] for primal_gap in all_primal_gaps]
+    all_dual_gaps = [dual_gap[1:ITERATIONS_FEW] for dual_gap in all_dual_gaps]
+    all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS_FEW] for primal_dual_gap in all_primal_dual_gaps]
 
     gap_0 = max([max(i) for i in all_dual_gaps])
     all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
-        all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS, colors=COLORS)
+        all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS_FEW, colors=COLORS)
     all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, None, None, gap_0,
-                                                                     iterations=ITERATIONS)
+                                                                     iterations=ITERATIONS_FEW)
     all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, None, None,
-                                                                            gap_0, iterations=ITERATIONS)
+                                                                            gap_0, iterations=ITERATIONS_FEW)
     file_name = ("collaborative_filtering" +  "_radius=" + str(radius))
 
     # Prepare the data to be saved, now including styles, colors, and markers
@@ -104,9 +104,9 @@ for radius in radii:
     # y_label = "subopt" + r"$_t$"
     # gap_plotter(y_data=all_primal_gaps,
     #             labels=labels,
-    #             iterations=ITERATIONS_MANY,
+    #             iterations=ITERATIONS_FEW_MANY,
     #             file_name=("subopt_" + file_name),
-    #             x_lim=(1, ITERATIONS_MANY),
+    #             x_lim=(1, ITERATIONS_FEW_MANY),
     #             y_lim=determine_y_lims(all_primal_gaps),
     #             y_label=y_label,
     #             directory="experiments/figures/",
@@ -119,9 +119,9 @@ for radius in radii:
     # y_label = "gap" + r"$_t$"
     # gap_plotter(y_data=all_dual_gaps,
     #             labels=labels,
-    #             iterations=ITERATIONS_MANY,
+    #             iterations=ITERATIONS_FEW_MANY,
     #             file_name=("gap_" + file_name),
-    #             x_lim=(1, ITERATIONS_MANY),
+    #             x_lim=(1, ITERATIONS_FEW_MANY),
     #             y_lim=determine_y_lims(all_dual_gaps),
     #             y_label=y_label,
     #             directory="experiments/figures/",
@@ -134,9 +134,9 @@ for radius in radii:
     # y_label = "primaldual" + r"$_t$"
     # gap_plotter(y_data=all_primal_dual_gaps,
     #             labels=labels,
-    #             iterations=ITERATIONS_MANY,
+    #             iterations=ITERATIONS_FEW_MANY,
     #             file_name=("primaldual_" + file_name),
-    #             x_lim=(1, ITERATIONS_MANY),
+    #             x_lim=(1, ITERATIONS_FEW_MANY),
     #             y_lim=determine_y_lims(all_primal_dual_gaps),
     #             y_label=y_label,
     #             directory="experiments/figures/",
