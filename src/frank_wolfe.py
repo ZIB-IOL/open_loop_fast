@@ -1,3 +1,4 @@
+
 from src.auxiliary_functions import fd
 from src.feasible_region import away_oracle, vertex_among_active_vertices
 
@@ -52,7 +53,6 @@ def frank_wolfe(feasible_region,
     fw_gap_list = []
     iterate_list = []
     x_p_list = []
-
     for i in range(0, n_iters):
         gradient = objective_function.evaluate_gradient(x)
         p_fw, fw_gap, x_p = feasible_region.linear_minimization_oracle(gradient, x)

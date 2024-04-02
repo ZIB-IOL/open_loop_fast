@@ -160,6 +160,7 @@ def run_experiment(iterations,
     dual_data = []
     primal_dual_data = []
     for step in fw_step_size_rules:
+        print(".")
         current_label = translate_step_types("FW", step)
 
         iterate_list, loss_list, fw_gap_list, x, x_p_list = frank_wolfe(feasible_region=feasible_region,
