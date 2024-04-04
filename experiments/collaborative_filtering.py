@@ -23,13 +23,13 @@ radii = [1000, 2000, 3000]
 for radius in radii:
     data = pd.read_csv(os.path.dirname(__file__) + '/../datasets/movielens100k.csv',
                        names=['user id', 'item id', 'rating', 'timestamp'])
-    # A = pd.pivot_table(data, values='rating', index='user id', columns='item id').values
-    # m, n = A.shape
-    #
-    # objective_function = HuberLossCollaborativeFiltering(A=A)
-    # feasible_region = NuclearNormBall(m, n, radius=radius)
+    A = pd.pivot_table(data, values='rating', index='user id', columns='item id').values
+    m, n = A.shape
 
-    # print("Dimensions: ", (m, n))
+    objective_function = HuberLossCollaborativeFiltering(A=A)
+    feasible_region = NuclearNormBall(m, n, radius=radius)
+
+    print("Dimensions: ", (m, n))
 
     step_size_rules = []
     labels = []
@@ -47,46 +47,46 @@ for radius in radii:
         r'$\eta_t = \frac{2+\log(t+1)}{t+2+\log(t+1)}$'
     ]
 
-    # all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS_FEW, objective_function,
-    #                                                                          feasible_region,
-    #                                                                          run_more=RUN_MORE_FEW,
-    #                                                                          fw_step_size_rules=step_size_rules)
-    # all_primal_gaps = [primal_gap[1:ITERATIONS_FEW] for primal_gap in all_primal_gaps]
-    # all_dual_gaps = [dual_gap[1:ITERATIONS_FEW] for dual_gap in all_dual_gaps]
-    # all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS_FEW] for primal_dual_gap in all_primal_dual_gaps]
-    #
-    # gap_0 = max([max(i) for i in all_dual_gaps])
-    # all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
-    #     all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS_FEW, colors=COLORS)
-    # all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, None, None, gap_0,
-    #                                                                  iterations=ITERATIONS_FEW)
-    # all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, None, None,
-    #                                                                         gap_0, iterations=ITERATIONS_FEW)
+    all_primal_gaps, all_dual_gaps, all_primal_dual_gaps, _ = run_experiment(ITERATIONS_FEW, objective_function,
+                                                                             feasible_region,
+                                                                             run_more=RUN_MORE_FEW,
+                                                                             fw_step_size_rules=step_size_rules)
+    all_primal_gaps = [primal_gap[1:ITERATIONS_FEW] for primal_gap in all_primal_gaps]
+    all_dual_gaps = [dual_gap[1:ITERATIONS_FEW] for dual_gap in all_dual_gaps]
+    all_primal_dual_gaps = [primal_dual_gap[1:ITERATIONS_FEW] for primal_dual_gap in all_primal_dual_gaps]
+
+    gap_0 = max([max(i) for i in all_dual_gaps])
+    all_primal_gaps, labels, styles, colors, markers = create_reference_lines_automatically(
+        all_primal_gaps, labels, None, None, gap_0, iterations=ITERATIONS_FEW, colors=COLORS)
+    all_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_dual_gaps, labels, None, None, gap_0,
+                                                                     iterations=ITERATIONS_FEW)
+    all_primal_dual_gaps, _, _, _, _ = create_reference_lines_automatically(all_primal_dual_gaps, labels, None, None,
+                                                                            gap_0, iterations=ITERATIONS_FEW)
     file_name = ("collaborative_filtering" +  "_radius=" + str(radius))
 
-    # # Prepare the data to be saved, now including styles, colors, and markers
-    # data_to_save = {
-    #     "file_name": file_name,
-    #     "all_primal_gaps": all_primal_gaps,
-    #     "all_dual_gaps": all_dual_gaps,
-    #     "all_primal_dual_gaps": all_primal_dual_gaps,
-    #     "labels": labels,
-    #     "styles": styles,  # Assuming you have a variable styles defined
-    #     "colors": colors,  # Assuming you have a variable colors defined
-    #     "markers": markers  # Assuming you have a variable markers defined
-    # }
+    # Prepare the data to be saved, now including styles, colors, and markers
+    data_to_save = {
+        "file_name": file_name,
+        "all_primal_gaps": all_primal_gaps,
+        "all_dual_gaps": all_dual_gaps,
+        "all_primal_dual_gaps": all_primal_dual_gaps,
+        "labels": labels,
+        "styles": styles,  # Assuming you have a variable styles defined
+        "colors": colors,  # Assuming you have a variable colors defined
+        "markers": markers  # Assuming you have a variable markers defined
+    }
 
     # Specify the directory and file path
     directory_path = "experiments/data/"
     file_path = f"{directory_path}{file_name}.pkl"
 
-    # # Check if the directory exists, and create it if it does not
-    # if not os.path.exists(directory_path):
-    #     os.makedirs(directory_path)
-    #
-    # # Write the serialized data to file
-    # with open(file_path, 'wb') as file:
-    #     pickle.dump(data_to_save, file)
+    # Check if the directory exists, and create it if it does not
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+
+    # Write the serialized data to file
+    with open(file_path, 'wb') as file:
+        pickle.dump(data_to_save, file)
 
     # # Load the serialized data from file
     # with open(file_path, 'rb') as file:
